@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QAction
 from PyQt5.QtCore import QSettings
 from PyQt5.QtCore import QObject, pyqtSlot
+import string
 
 class QExtendedMainWindow(QMainWindow):
     
@@ -15,6 +16,8 @@ class QExtendedMainWindow(QMainWindow):
         
     @pyqtSlot(int, QObject)
     def open_recent(self):
+        #action = qobject_cast<QAction *>(sender())
+        open_recent( str( action.data() )
         ''' C++: void open_recent() '''
         
         
@@ -23,46 +26,41 @@ class QExtendedMainWindow(QMainWindow):
         #settings.setValue("geometry", saveGeometry())
         None
     
-    def keyPressEvent(self, evnt ):
-        if evnt.key() == 's' or ( evnt.key() == 'S' and not evnt.isAutoRepeat() ):
+    def keyPressEvent(self, e ):
+        if e.key() == 's' or ( e.key() == 'S' and not e.isAutoRepeat() ):
             #ScreenShot()
             return
+
+    def addRecentMenu(self, parent_menu):
+        ''' List of recently accessed files '''
+        recent_menu = parent_menu.addMenu( 'Recent Files' )
+        
+        for i in range(0, 10):
+            tmp = QAction(self)
+            tmp.setVisible(False)
+            recent_menu.addAction( tmp )
+            tmp.triggered.connect( self.open_recent() )
+        
+        alist = recent_menu.actions()
+        #QSettings settings;
+        files = self.settings.value("RecentFileList").toStringList()
+        a = alist.size()
+        b = files.size()
+        limit = b
+        if a > b:
+            limit = a
+            
+        for i in range(0, limit):
+            file = files[i]
+            if file.length() > 160:
+                file = file.left(40) + ' ... ' + file.right(100)
+            alist[i].setText( file )
+            alist[i].setData( files[i] )
+            alist[i].setVisible( True )
+        
+        return recent_menu
+
 '''
-QMenu * QExtendedMainWindow::addRecentMenu(QMenu * parent_menu){
-
-    // List of recently accessed files
-    QMenu * recent_menu = parent_menu->addMenu("Recent Files");
-    {
-        for(int i = 0; i < 10; i++){
-            QAction * tmp = new QAction( this );
-            tmp->setVisible(false);
-            recent_menu->addAction( tmp );
-            connect( tmp, SIGNAL(triggered()), this, SLOT(open_recent()) );
-        }
-        QList<QAction*> alist = recent_menu->actions();
-        //QSettings settings;
-        QStringList files = settings.value("RecentFileList").toStringList();
-        for(int i = 0; i < alist.size() && i < files.size(); i++){
-            QString file = files[i];
-            if( file.length() > 160 ){
-                file = file.left(40) + " ... " + file.right(100);
-            }
-            alist[i]->setText( file );
-            alist[i]->setData( files[i] );
-            alist[i]->setVisible( true );
-        }
-    }
-    return recent_menu;
-}
-
-void QExtendedMainWindow::open_recent( ){
-    QAction *action = qobject_cast<QAction *>(sender());
-    open_recent( action->data().toString() );
-}
-
-void QExtendedMainWindow::open_recent( QString ){ }
-
-
 void QExtendedMainWindow::updateRecentMenu( QMenu * recent_menu, QString fname ){
 
     QStringList files = settings.value("RecentFileList").toStringList();
