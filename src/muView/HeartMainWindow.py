@@ -1,30 +1,16 @@
 #from PyQt5.QtWidgets import QWidget
-from common.QT.QExtendedMainWindow import QExtendedMainWindow
-from PyQt5.QtCore import QAction, QMenu, tr
-import PyQt5.QtCore import QApplication 
+from PyQt5.QtWidgets import QAction, QMenu
 import numpy as np
-from gtk._gtk import MenuBar
 
-'''
-#include <QApplication>
-#include <muView/HeartMainWindow.h>
-#include <time.h>
-#include <QApplication>
-#include <QT/QExtendedMainWindow.h>
-#include <muView/ParallelCoordinates.h>
-#include <muView/HeartDock.h>
-#include <muView/HeartMainWindow.h>
-#include <QMenuBar>
-#include <QDesktopWidget>
-#include <iostream>
-'''
+import HeartDock
+from common.QT import QExtendedMainWindow
 
 class MainWindow(QExtendedMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         
         # SCI::ThirdPersonCameraControls   view
-        self.cur_dock           = None#HeartDock()                
+        #self.cur_dock           = HeartDock()                
         self.file_menu          = QMenu()                 
         self.open_mesh          = QAction()               
         self.append_data        = QAction()              
@@ -42,31 +28,31 @@ class MainWindow(QExtendedMainWindow):
     def init(self): 
         self.cur_dock = 0
         
-        #self.view.Set( 15.0f, 75.0f, 5.0f, (0,0,0), (0,1,0) )
+        self.view.Set( 15.0, 75.0, 5.0, (0,0,0), (0,1,0) )
         self.view.Load('view.txt')
     
         # Setup File Menu
         file_menu =  self.menuBar().addMenu('&File')
         
         # Setup Open Menus
-        open_mesh = QAction('Open Mesh')
-        file_menu.addAction( open_mesh )
-        file_menu.addAction( append_data = QAction('Append Data' ) )
-        file_menu.addAction( open_dfield = QAction('Open Distance Field') )
-        file_menu.addSeparator()
+        self.open_mesh = QAction('Open Mesh')
+        self.file_menu.addAction( self.open_mesh )
+        self.file_menu.addAction( append_data = QAction('Append Data' ) )
+        self.file_menu.addAction( open_dfield = QAction('Open Distance Field') )
+        self.file_menu.addSeparator()
 
-        file_menu.addAction( import_mesh = QAction('Import Additional Mesh') )
-        file_menu.addSeparator()
+        self.file_menu.addAction( import_mesh = QAction('Import Additional Mesh') )
+        self.file_menu.addSeparator()
 
         # Setup Save Menus
-        file_menu.addAction( save_mesh = QAction('Save Mesh') )
-        file_menu.addAction( save_data = QAction('Save Data') )
-        file_menu.addSeparator()
+        self.file_menu.addAction( save_mesh = QAction('Save Mesh') )
+        self.file_menu.addAction( save_data = QAction('Save Data') )
+        self.file_menu.addSeparator()
 
         # Setup Exit Menu
-        file_menu.addAction( exit = QAction('E&xit') )
+        self.file_menu.addAction( exit = QAction('E&xit') )
 
-        exit.setShortcut(tr('CTRL+X'))
+        exit.setShortcut( 'CTRL+X' )
 
         self.save_mesh.setEnabled( False )
         self.save_data.setEnabled( False )
@@ -79,8 +65,8 @@ class MainWindow(QExtendedMainWindow):
         self.save_data.triggered().connect( self.save_data_file() )
         self.exit.triggered().connect( self.quit() )
     
-        view_menu = QMenu('View')
-        view_reset = view_menu.addAction( tr('Reset') )
+        self.view_menu = QMenu('View')
+        self.view_reset = view_menu.addAction( 'Reset' )
         self.view_reset.triggered().connect( self.ResetView() )
         self.menuBar().addMenu( view_menu )
         
@@ -130,7 +116,7 @@ class MainWindow(QExtendedMainWindow):
         
         QApplication.restoreOverrideCursor()
 
-    def void import_mesh_file(self):
+    def import_mesh_file(self):
         if self.cur_dock == 0:
             return
     
@@ -154,7 +140,7 @@ class MainWindow(QExtendedMainWindow):
         }
         '''
     
-        QApplication::restoreOverrideCursor()
+        QApplication.restoreOverrideCursor()
 
     def append_data_file(self):
         #if defined(WIN32)
@@ -165,12 +151,12 @@ class MainWindow(QExtendedMainWindow):
             pdata = None#HeartDock.OpenPointData( cur_dock.GetPointData() )
             if pdata: self.cur_dock.SetPointData( pdata )
     
-        QApplication::restoreOverrideCursor()
+        QApplication.restoreOverrideCursor()
 
 
     def open_dist_field_file(self):
         dfield = None#HeartDock.OpenDistanceField()
-        if dfield: cur_dock.SetDistanceFieldData( dfield )
+        if dfield: self.cur_dock.SetDistanceFieldData( dfield )
 
 
     def save_mesh_file(self):
