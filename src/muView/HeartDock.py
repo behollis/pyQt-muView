@@ -14,7 +14,9 @@
 #include <Data/FiberDirectionData.h>
 #include <Data/DistanceField.h>
 
-from PyQt5.QtWidgets import QSplitter, QTableWidget, QDockWidget
+from PyQt5.QtWidgets import QSplitter, QTableWidget, QDockWidget, QTabWidget, QControlWidget, QRadioButton, QLabel
+from PyQt5.QtWidgets import QSpinBox, QCheckBox, QPushButton, QWidget, QGridLayout
+#from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
 
 class HeartDock(QDockWidget):
@@ -25,20 +27,19 @@ class HeartDock(QDockWidget):
 
         super(QDockWidget, self).__init__()
         
-        self.pdata = None  #Data::PointData          *
-        self.pmesh  = None  #Data::Mesh::PointMesh    *
-        self.tdata  = None  #Data::Mesh::SolidMesh    *
-        self.fdata  = None  #Data::FiberDirectionData * 
-        self.dfield  = None #Data::DistanceFieldSet   * 
+        self.pdata     = None   #Data::PointData          *
+        self.pmesh     = None  #Data::Mesh::PointMesh    *
+        self.tdata     = None  #Data::Mesh::SolidMesh    *
+        self.fdata     = None  #Data::FiberDirectionData * 
+        self.dfield    = None #Data::DistanceFieldSet   * 
     
         self.sp_widget  = None  #QSplitter           * 
         self.vp_widget  = None  #QSplitter           * 
         self.tb_widget  = None  #QTabWidget          * 
+        
         self.pr_widget  = None  #ParallelCoordinates * 
-    
         self.render_engine  = None #RenderEngine 
-        
-        
+    
         self.init()
 
     def init(self):
@@ -48,10 +49,9 @@ class HeartDock(QDockWidget):
         sp0 = QSplitter( Qt.Horizontal )
         sp1 = QSplitter( Qt.Horizontal )
     
-        '''
-        self.pr_widget = ParallelCoordinates( 0 )
-        self.tb_widget = QTabWidget( )
-        '''
+        #self.pr_widget = ParallelCoordinates( 0 )
+        
+        self.tb_widget = QTabWidget()
         
         #sp0.addWidget( self.render_engine.re )
         #sp0.addWidget( self.render_engine.pca )
@@ -61,20 +61,16 @@ class HeartDock(QDockWidget):
         sp1.addWidget( self.render_engine.re2[1]) )
         sp1.addWidget( self.render_engine.re2[2]) )
         '''
-        '''
+        
         self.vp_widget.addWidget( sp0 )
         self.vp_widget.addWidget( sp1 )
         self.vp_widget.addWidget( self.pr_widget )
-        '''
-    
-        '''
         self.sp_widget.addWidget( self.vp_widget )
         self.sp_widget.addWidget( self.tb_widget )
-        '''
                 
-        setWidget( sp_widget )
+        self.setWidget( self.sp_widget )
     
-        drawBoxWidget = QT.QControlWidget( )
+        drawBoxWidget = QControlWidget()
 
         draw0 = drawBoxWidget.addRadioButton( tr('Points')           )
         draw1 = drawBoxWidget.addRadioButton( tr('Network')          )
@@ -84,14 +80,15 @@ class HeartDock(QDockWidget):
 
         draw0.setChecked(True)
 
+        '''
         draw0.clicked.connect(&(render_engine).setDrawModePoints)
         draw1.clicked.connect(&(render_engine).setDrawModeNetwork)
         draw2.clicked.connect(&(render_engine).setDrawModeVolumeRendering)
         draw3.clicked.connect(&(render_engine).setDrawModeIsosurfacing)
         draw4.clicked.connect(&(render_engine).setDrawModeDistanceField)
-    
+        '''
 
-        colorBoxWidget = QWidget( )
+        colorBoxWidget = QWidget()
     
         color0 = QRadioButton( tr('Dimension Value') )
         color7 = QRadioButton( tr('Min Value') )
@@ -104,49 +101,51 @@ class HeartDock(QDockWidget):
         color6 = QRadioButton( tr('Fiber Direction') )
         color0.setChecked(True)
 
-        QLabel dimension_label = QLabel(tr('Dimension'))
-        QSpinBox dimension_spinner = QSpinBox( )
+        dimension_label = QLabel(tr('Dimension'))
+        dimension_spinner = QSpinBox()  
         dimension_spinner.setRange(0,40)
         dimension_spinner.setValue(0)
 
-        QLabel cluster_count_label = QLabel(tr('Clusters'))
-        QSpinBox cluster_count_spinner = QSpinBox( )
+        cluster_count_label = QLabel(tr('Clusters'))
+        cluster_count_spinner = QSpinBox( )
         cluster_count_spinner.setRange(2,40)
         cluster_count_spinner.setValue( 12 )
 
-        QT.QControlWidget cluster_type = QT.QControlWidget( )
+        cluster_type = QControlWidget()
     
-        QRadioButton ct0 = cluster_type.addRadioButton( tr('L2 Norm') )
-        QRadioButton ct1 = cluster_type.addRadioButton( tr('Pearson Correlation') )
-        QRadioButton ct2 = cluster_type.addRadioButton( tr('Histogram Difference') )
+        ct0 = cluster_type.addRadioButton( tr('L2 Norm') )
+        ct1 = cluster_type.addRadioButton( tr('Pearson Correlation') )
+        ct2 = cluster_type.addRadioButton( tr('Histogram Difference') )
         ct0.setChecked( True )
+        
+        '''
         ct0.clicked.connect(&(render_engine).setClusterTypeL2Norm)
         ct1.clicked.connect(&(render_engine).setClusterTypePearson)
         ct2.clicked.connect(&(render_engine).setClusterTypeHistogram)
-    
+        '''
 
-        QLabel cluster_iteration_label = QLabel(tr('Iterations'))
-        QSpinBox cluster_iteration_spinner = QSpinBox( )
+        cluster_iteration_label = QLabel(tr('Iterations'))
+        cluster_iteration_spinner = QSpinBox( )
         cluster_iteration_spinner.setRange(1,40)
         cluster_iteration_spinner.setValue( 5 )
 
-        QCheckBox cluster_histogram = QCheckBox( tr('Histogram') )
+        cluster_histogram = QCheckBox( tr('Histogram') )
         cluster_histogram.setChecked( True )
 
-        QPushButton cluster_recalculate = QPushButton( tr('Recalculate') )
+        cluster_recalculate = QPushButton( tr('Recalculate') )
+        pca_sel_color = QPushButton( tr('PCA: Select Paint Color') )
 
-        QPushButton pca_sel_color = QPushButton( tr('PCA: Select Paint Color') )
-
-        QLabel   pca_dim0_label = QLabel(tr('PCA X Dimension'))
-        QSpinBox pca_dim0_spinner = QSpinBox( )
+        pca_dim0_label = QLabel(tr('PCA X Dimension'))
+        pca_dim0_spinner = QSpinBox( )
         pca_dim0_spinner.setRange(0,100)
         pca_dim0_spinner.setValue( 0 )
 
-        QLabel   pca_dim1_label = QLabel(tr('PCA Y Dimension'))
-        QSpinBox pca_dim1_spinner = QSpinBox( )
+        pca_dim1_label = QLabel(tr('PCA Y Dimension'))
+        pca_dim1_spinner = QSpinBox( )
         pca_dim1_spinner.setRange(0,100)
         pca_dim1_spinner.setValue( 1 )
 
+        '''
         color0.clicked.connect(&(render_engine).setColorModeDimension)
         color1.clicked.connect(&(render_engine).setColorModeMedian)
         color2.clicked.connect(&(render_engine).setColorModeStDev)
@@ -157,60 +156,61 @@ class HeartDock(QDockWidget):
         color7.clicked.connect(&(render_engine).setColorModeMin)
         color8.clicked.connect(&(render_engine).setColorModeMax)
 
-#        pca_sel_color.clicked.connect(&(render_engine.pca).selectPaintColor)
-
+        pca_sel_color.clicked.connect(&(render_engine.pca).selectPaintColor)
         dimension_spinner.valueChanged.connect(&(render_engine).setDimension)
 
         cluster_count_spinner.valueChanged.connect(&(render_engine).setClusterCount)
         cluster_iteration_spinner.valueChanged.connect(&(render_engine).setClusterIterations)
         cluster_recalculate.clicked.connect(&(render_engine).setClusterRecalculate)
         cluster_histogram.clicked.connect(&(render_engine).setClusterHistogram)
+        '''
 
-        color0.clicked.connect(pr_widget.Reset)
-        color1.clicked.connect(pr_widget.Reset)
-        color2.clicked.connect(pr_widget.Reset)
-        color3.clicked.connect(pr_widget.Reset)
-        color4.clicked.connect(pr_widget.Reset)
-        color5.clicked.connect(pr_widget.Reset)
-        color6.clicked.connect(pr_widget.Reset)
-        color7.clicked.connect(pr_widget.Reset)
-        color8.clicked.connect(pr_widget.Reset)
+        color0.clicked.connect(self.pr_widget.Reset)
+        color1.clicked.connect(self.pr_widget.Reset)
+        color2.clicked.connect(self.pr_widget.Reset)
+        color3.clicked.connect(self.pr_widget.Reset)
+        color4.clicked.connect(self.pr_widget.Reset)
+        color5.clicked.connect(self.pr_widget.Reset)
+        color6.clicked.connect(self.pr_widget.Reset)
+        color7.clicked.connect(self.pr_widget.Reset)
+        color8.clicked.connect(self.pr_widget.Reset)
 
-        dimension_spinner.valueChanged.connect(pr_widget.Reset)
+        dimension_spinner.valueChanged.connect(self.pr_widget.Reset)
 
-        cluster_count_spinner.valueChanged.connect(pr_widget.Reset)
-        cluster_iteration_spinner.valueChanged.connect(pr_widget.Reset)
-        cluster_recalculate.clicked.connect(pr_widget.Reset)
-        cluster_histogram.clicked.connect(pr_widget.Reset)
+        cluster_count_spinner.valueChanged.connect(self.pr_widget.Reset)
+        cluster_iteration_spinner.valueChanged.connect(self.pr_widget.Reset)
+        cluster_recalculate.clicked.connect(self.pr_widget.Reset)
+        cluster_histogram.clicked.connect(self.pr_widget.Reset)
 
 #        pca_dim0_spinner.valueChanged.connect(&(render_engine.pca).ModifyPCADim0)
 #        pca_dim1_spinner.valueChanged.connect(&(render_engine.pca).ModifyPCADim1)
 
         row = 0
-        QGridLayout colorLayout = QGridLayout( )
-        colorLayout.addWidget( color0,                     row++, 0, 1, 3 )
-        colorLayout.addWidget( dimension_label,            row,   1, 1, 1 )
-        colorLayout.addWidget( dimension_spinner,          row++, 2, 1, 1 )
-        colorLayout.addWidget( color1,                     row++, 0, 1, 3 )
-        colorLayout.addWidget( color7,                     row++, 0, 1, 3 )
-        colorLayout.addWidget( color8,                     row++, 0, 1, 3 )
-        colorLayout.addWidget( color2,                     row++, 0, 1, 3 )
-        colorLayout.addWidget( color3,                     row++, 0, 1, 3 )
-        colorLayout.addWidget( cluster_histogram,          row++, 1, 1, 2 )
+        colorLayout = QGridLayout( )
+        
+        row+=1;colorLayout.addWidget( color0,             row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( dimension_label,            row,   1, 1, 1 )
+        row+=1;colorLayout.addWidget( dimension_spinner,          row, 2, 1, 1 )
+        row+=1;colorLayout.addWidget( color1,                     row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( color7,                     row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( color8,                     row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( color2,                     row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( color3,                     row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( cluster_histogram,          row, 1, 1, 2 )
         colorLayout.addWidget( cluster_count_label,        row,   1, 1, 1 )
-        colorLayout.addWidget( cluster_count_spinner,      row++, 2, 1, 1 )
-        colorLayout.addWidget( cluster_type,               row++, 1, 1, 1 )
+        row+=1;colorLayout.addWidget( cluster_count_spinner,      row, 2, 1, 1 )
+        row+=1;colorLayout.addWidget( cluster_type,               row, 1, 1, 1 )
         colorLayout.addWidget( cluster_iteration_label,    row,   1, 1, 1 )
-        colorLayout.addWidget( cluster_iteration_spinner,  row++, 2, 1, 1 )
-        colorLayout.addWidget( cluster_recalculate,        row++, 1, 1, 2 )
-        colorLayout.addWidget( color4,                     row++, 0, 1, 3 )
-        colorLayout.addWidget( color5,                     row++, 0, 1, 3 )
-        colorLayout.addWidget( pca_sel_color,              row++, 0, 1, 3 )
-        colorLayout.addWidget( color6,                     row++, 0, 1, 3 )
-        colorLayout.addWidget( pca_dim0_label,             row,   1, 1, 1 )
-        colorLayout.addWidget( pca_dim0_spinner,           row++, 2, 1, 1 )
+        row+=1;colorLayout.addWidget( cluster_iteration_spinner,  row, 2, 1, 1 )
+        row+=1;colorLayout.addWidget( cluster_recalculate,        row, 1, 1, 2 )
+        row+=1;colorLayout.addWidget( color4,                     row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( color5,                     row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( pca_sel_color,              row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( color6,                     row, 0, 1, 3 )
+        row+=1;colorLayout.addWidget( pca_dim0_label,             row,   1, 1, 1 )
+        row+=1;colorLayout.addWidget( pca_dim0_spinner,           row, 2, 1, 1 )
         colorLayout.addWidget( pca_dim1_label,             row,   1, 1, 1 )
-        colorLayout.addWidget( pca_dim1_spinner,           row++, 2, 1, 1 )
+        row+=1;colorLayout.addWidget( pca_dim1_spinner,           row, 2, 1, 1 )
         colorLayout.setRowStretch( row, 1 )
         colorBoxWidget.setLayout( colorLayout )
      

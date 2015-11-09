@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QAction, QMenu, QApplication
 import numpy as np
 
-#import HeartDock
+import HeartDock
 from common.QT.QExtendedMainWindow import QExtendedMainWindow
 
 class MainWindow(QExtendedMainWindow):
