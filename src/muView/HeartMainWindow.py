@@ -1,41 +1,40 @@
-#from PyQt5.QtWidgets import QWidget
-from PyQt5.QtWidgets import QAction, QMenu
+from PyQt5.QtWidgets import QAction, QMenu, QApplication
 import numpy as np
 
 #import HeartDock
-from common.QT import QExtendedMainWindow
+from common.QT.QExtendedMainWindow import QExtendedMainWindow
 
 class MainWindow(QExtendedMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         
-        # SCI::ThirdPersonCameraControls   view
-        #self.cur_dock           = HeartDock()                
+        self.view               = None#SCI::ThirdPersonCameraControls   
+        self.cur_dock           = None#HeartDock()                
         self.file_menu          = QMenu()                 
-        self.open_mesh          = QAction()               
-        self.append_data        = QAction()              
-        self.open_dfield        = QAction()             
-        self.import_mesh        = QAction()             
-        self.save_mesh          = QAction()               
-        self.save_data          = QAction()                
-        self.exit               = QAction()                    
-        self.view_menu          = QAction()               
-        self.view_reset         = QAction()              
-        self.view_menu_action   = QAction()        
+        self.open_mesh          = None#QAction()               
+        self.append_data        = None#QAction()              
+        self.open_dfield        = None#QAction()             
+        self.import_mesh        = None#QAction()             
+        self.save_mesh          = None#QAction()               
+        self.save_data          = None#QAction()                
+        self.exit               = None#QAction()                    
+        self.view_menu          = None#QAction()               
+        self.view_reset         = None#QAction()              
+        self.view_menu_action   = None#QAction()        
         
         self.init()
 
     def init(self): 
         self.cur_dock = 0
         
-        self.view.Set( 15.0, 75.0, 5.0, (0,0,0), (0,1,0) )
-        self.view.Load('view.txt')
+        #self.view.Set( 15.0, 75.0, 5.0, (0,0,0), (0,1,0) )
+        #self.view.Load('view.txt')
     
         # Setup File Menu
         file_menu =  self.menuBar().addMenu('&File')
         
         # Setup Open Menus
-        self.open_mesh = QAction('Open Mesh')
+        self.open_mesh = QAction('Open Mesh', self )
         self.file_menu.addAction( self.open_mesh )
         self.file_menu.addAction( append_data = QAction('Append Data' ) )
         self.file_menu.addAction( open_dfield = QAction('Open Distance Field') )
