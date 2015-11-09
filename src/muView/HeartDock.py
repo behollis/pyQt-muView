@@ -14,8 +14,8 @@
 #include <Data/FiberDirectionData.h>
 #include <Data/DistanceField.h>
 
-from PyQt5.QtCore import QDockWidget, QSplitter, QTableWidget
-#from common.QT import QControlWidget
+from PyQt5.QtWidgets import QSplitter, QTableWidget, QDockWidget
+from PyQt5.QtCore import Qt
 
 class HeartDock(QDockWidget):
     def __init__(self):

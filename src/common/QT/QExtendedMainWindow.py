@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import QMainWindow, QAction, QVariant, QWidget, QFileDialog
 from PyQt5.QtWidgets import QFileInfo
 from PyQt5.QtCore import QSettings
 from PyQt5.QtCore import QObject, pyqtSlot
-import string
 
 class QExtendedMainWindow(QMainWindow):
     
