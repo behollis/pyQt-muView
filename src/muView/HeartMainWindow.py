@@ -36,22 +36,27 @@ class MainWindow(QExtendedMainWindow):
         # Setup Open Menus
         self.open_mesh = QAction('Open Mesh', self )
         self.file_menu.addAction( self.open_mesh )
-        self.file_menu.addAction( append_data = QAction('Append Data' ) )
-        self.file_menu.addAction( open_dfield = QAction('Open Distance Field') )
+        self.append_data = QAction('Append Data', self )
+        self.file_menu.addAction( self.append_data )
+        self.open_dfield = QAction('Open Distance Field' , self )
+        self.file_menu.addAction( self.open_dfield )
         self.file_menu.addSeparator()
-
-        self.file_menu.addAction( import_mesh = QAction('Import Additional Mesh') )
+        self.import_mesh = QAction('Import Additional Mesh' , self )
+        self.file_menu.addAction( self.import_mesh )
         self.file_menu.addSeparator()
 
         # Setup Save Menus
-        self.file_menu.addAction( save_mesh = QAction('Save Mesh') )
-        self.file_menu.addAction( save_data = QAction('Save Data') )
+        self.save_mesh = QAction('Save Mesh' , self )
+        self.file_menu.addAction( self.save_mesh )
+        self.save_data = QAction('Save Data' , self )
+        self.file_menu.addAction( self.save_data )
         self.file_menu.addSeparator()
 
         # Setup Exit Menu
-        self.file_menu.addAction( exit = QAction('E&xit') )
+        self.exit = QAction('Exit', self )
+        self.file_menu.addAction( self.exit )
 
-        exit.setShortcut( 'CTRL+X' )
+        self.exit.setShortcut( 'CTRL+X' )
 
         self.save_mesh.setEnabled( False )
         self.save_data.setEnabled( False )
@@ -65,9 +70,9 @@ class MainWindow(QExtendedMainWindow):
         self.exit.triggered().connect( self.quit() )
     
         self.view_menu = QMenu('View')
-        self.view_reset = view_menu.addAction( 'Reset' )
+        self.view_reset = self.view_menu.addAction( 'Reset' )
         self.view_reset.triggered().connect( self.ResetView() )
-        self.menuBar().addMenu( view_menu )
+        self.menuBar().addMenu( self.view_menu )
         
     def ResetView(self):
         #self.view.Set( 15.0f, 75.0f, 5.0f, (0,0,0), (0,1,0) )
