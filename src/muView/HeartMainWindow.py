@@ -31,7 +31,7 @@ class MainWindow(QExtendedMainWindow):
         #self.view.Load('view.txt')
     
         # Setup File Menu
-        file_menu =  self.menuBar().addMenu('&File')
+        self.file_menu =  self.menuBar().addMenu('File')
         
         # Setup Open Menus
         self.open_mesh = QAction('Open Mesh', self )
@@ -61,17 +61,17 @@ class MainWindow(QExtendedMainWindow):
         self.save_mesh.setEnabled( False )
         self.save_data.setEnabled( False )
 
-        self.open_mesh.triggered().connect( self.open_mesh_file() )
-        self.append_data.triggered().connect( self.append_data_file() )
-        self.open_dfield.triggered().connect( self.open_dist_field_file() )
-        self.import_mesh.triggered().connect( self.import_mesh_file() )
-        self.save_mesh.triggered().connect( self.save_mesh_file() )
-        self.save_data.triggered().connect( self.save_data_file() )
-        self.exit.triggered().connect( self.quit() )
+        self.open_mesh.triggered.connect( self.open_mesh_file )
+        self.append_data.triggered.connect( self.append_data_file )
+        self.open_dfield.triggered.connect( self.open_dist_field_file )
+        self.import_mesh.triggered.connect( self.import_mesh_file )
+        self.save_mesh.triggered.connect( self.save_mesh_file )
+        self.save_data.triggered.connect( self.save_data_file )
+        #self.exit.triggered.connect( super(MainWindow, self).quit )
     
         self.view_menu = QMenu('View')
         self.view_reset = self.view_menu.addAction( 'Reset' )
-        self.view_reset.triggered().connect( self.ResetView() )
+        self.view_reset.triggered.connect( self.ResetView )
         self.menuBar().addMenu( self.view_menu )
         
     def ResetView(self):
