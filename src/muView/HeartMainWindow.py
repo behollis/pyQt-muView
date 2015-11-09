@@ -1,15 +1,15 @@
 from PyQt5.QtWidgets import QAction, QMenu, QApplication
 import numpy as np
 
-import HeartDock
 from common.QT.QExtendedMainWindow import QExtendedMainWindow
+import HeartDock
 
 class MainWindow(QExtendedMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         
         self.view               = None#SCI::ThirdPersonCameraControls   
-        self.cur_dock           = None#HeartDock()                
+        self.cur_dock           = HeartDock()                
         self.file_menu          = QMenu()                 
         self.open_mesh          = None#QAction()               
         self.append_data        = None#QAction()              

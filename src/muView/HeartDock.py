@@ -14,17 +14,17 @@
 #include <Data/FiberDirectionData.h>
 #include <Data/DistanceField.h>
 
-from PyQt5.QtWidgets import QSplitter, QTableWidget, QDockWidget, QTabWidget, QControlWidget, QRadioButton, QLabel
+from PyQt5.QtWidgets import QSplitter, QTableWidget, QDockWidget, QTabWidget 
+from PyQt5.QtWidgets import QControlWidget, QRadioButton, QLabel
 from PyQt5.QtWidgets import QSpinBox, QCheckBox, QPushButton, QWidget, QGridLayout
-#from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
+from common.QT import QExtendedMainWindow
 
 class HeartDock(QDockWidget):
-    def __init__(self):
+    def __init__(self, pView=None, _pmesh=None, _smesh=None, _fdata=None, parent=None):
         #HeartDock(SCI::ThirdPersonCameraControls * pView, Data::Mesh::PointMesh *
         # _pmesh, Data::Mesh::SolidMesh * _smesh, Data::FiberDirectionData * _fdata,
         # QWidget *parent = 0);
-
         super(QDockWidget, self).__init__()
         
         self.pdata     = None   #Data::PointData          *
@@ -39,10 +39,18 @@ class HeartDock(QDockWidget):
         
         self.pr_widget  = None  #ParallelCoordinates * 
         self.render_engine  = None #RenderEngine 
+        
+       
     
-        self.init()
+        self.init(pView,_pmesh,_smesh,_fdata,parent)
 
-    def init(self):
+    def init(self,pView,_pmesh,_smesh,_fdata,parent):
+        self.dfield = 0
+        self.pdata  = 0
+        self.pmesh  = _pmesh
+        self.tdata  = _smesh
+        self.fdata  = _fdata
+        
         self.vp_widget = QSplitter( Qt.Vertical )
         self.sp_widget = QSplitter( Qt.Horizontal )
     
@@ -213,117 +221,116 @@ class HeartDock(QDockWidget):
         row+=1;colorLayout.addWidget( pca_dim1_spinner,           row, 2, 1, 1 )
         colorLayout.setRowStretch( row, 1 )
         colorBoxWidget.setLayout( colorLayout )
-     
-        tb_widget->setTabPosition( tb_widget->West );
-        tb_widget->addTab(  drawBoxWidget, tr( 'Draw Mode' ) );
-        tb_widget->addTab( colorBoxWidget, tr( 'Color Mode' ) );
-        tb_widget->addTab(   isoBoxWidget, tr( 'Isosurfacing' ) );
-        tb_widget->addTab(  clipBoxWidget, tr( 'Clip Planes' ) );
-
-        dfield = 0;
-        pdata  = 0;
-        pmesh  = _pmesh;
-        tdata  = _smesh;
-        fdata  = _fdata;
-    
-        render_engine.SetParallelCoordinateView( pr_widget );
-        render_engine.SetData( pdata, pmesh, tdata );
-        render_engine.SetFiberData( fdata );
-
-    def minimumSizeHint():
-        return QSize(  50,  50); }
         
-    def sizeHint():
+        
+        #render_engine.SetParallelCoordinateView( self.pr_widget )
+        #render_engine.SetData( self.pdata, self.pmesh, self.tdata )
+        #render_engine.SetFiberData( selffdata );
+        
+        self.tb_widget.setTabPosition( self.tb_widget.West )
+        self.tb_widget.addTab( self.drawBoxWidget, tr( 'Draw Mode' ) )
+        self.tb_widget.addTab( self.colorBoxWidget, tr( 'Color Mode' ) )
+        self.tb_widget.addTab( self.isoBoxWidget, tr( 'Isosurfacing' ) )
+        self.tb_widget.addTab( self.clipBoxWidget, tr( 'Clip Planes' ) )
+        
+    def GetPointData(self):
+        return self.pdata
+    
+    def GetPointMesh(self): 
+         return self.pmesh
+     
+    def GetSolidMesh(self): 
+        return self.tdata
+    
+    def GetFiberData(self): 
+        return self.fdata
+    
+    def GetDistanceField(self): 
+        return self.dfield
+    
+    def minimumSizeHint(self):
+        qsize = QSize(50,50)
+        return qsize
+        
+    def sizeHint(self):
         return QSize( 500, 500)
     
-    def GetPointData():
-        return pdata
+    def SetPointData(self, _pdata ):
+        if self.pdata != _pdata:
+            pdata = _pdata        
+            #self.render_engine.SetData( pdata, pmesh, tdata )
+            #self.setWindowTitle( pdata.GetFilename() )
     
-     def GetPointMesh(): 
-         return pmesh
-     
-    def GetSolidMesh(): 
-        return tdata
-    
-    def GetFiberData(): 
-        return fdata
-    
-    def GetDistanceField(): 
-        return dfield
-
-    def SetPointData( _pdata ):
-        if pdata != _pdata:
-            if pdata: 
-                delete pdata
-            pdata = _pdata
-            self.render_engine.SetData( pdata, pmesh, tdata )
-            self.setWindowTitle( pdata.GetFilename() )
-    
-    def SetDistanceFieldData( _dfield ):
-        
-        if( dfield != _dfield )
-    
-            if(dfield) delete dfield
+    def SetDistanceFieldData(self, _dfield ):    
+        if self.dfield != _dfield: 
             dfield = _dfield
-            render_engine.SetDistanceFieldData( dfield )
+            #render_engine.SetDistanceFieldData( dfield )
     
-    def AddImportedMesh( _pmesh, _tdata ):
-        render_engine.AddImportedMesh( _pmesh,_tdata )
+    def AddImportedMesh(self, _pmesh, _tdata ):
+        #render_engine.AddImportedMesh( _pmesh,_tdata )
+        return
 
-    def OpenPointMesh():
-        fname = QT.QExtendedMainWindow.openDialog( tr('Load a Point Mesh'), QString('Any (*.point *.point.gz *.pts);; Point File (*.point);;Compressed Point File (*.point.gz);; PTS File (*.pts)') )
+    def OpenPointMesh(self):
+        fname = QExtendedMainWindow.QExtendedMainWindow.openDialog( tr('Load a Point Mesh'), \
+                    'Any (*.point *.point.gz *.pts);; Point File (*.point);;Compressed Point \
+                    File (*.point.gz);; PTS File (*.pts)' )  
     
         # Loading a point data file
         if( fname.endsWith('.point') or fname.endsWith('.point.gz') ):
-            return Data.Mesh.PointMesh( fname.toLocal8Bit().data(), True, fname.endsWith('.gz') )
+            return 0
+            #return Data.Mesh.PointMesh( fname.toLocal8Bit().data(), True, fname.endsWith('.gz') )
         # Loading raw pts data file
-        elif( fname.endsWith('.pts'): 
-            return Data.Mesh.PointMesh( fname.toLocal8Bit().data(), False, False )
-    
-        return 0
-
-    def OpenDistanceField( ):
-        fname = QT.QExtendedMainWindow.openDialog( tr('Load a Distance Field'), QString('Distance Field File (*.df *.dfield)') )
-
-        if( fname.endsWith('.dfield') or fname.endsWith('.df') )
-            return Data.DistanceFieldSet( fname.toLocal8Bit().data() )
-
-        return 0
-
-
-    def OpenSolidMesh():
-        mesh_name = QT.QExtendedMainWindow.openDialog( tr('Load an Associated Mesh'), QString('Any (*.tet *.hex *.btet *.btet.gz *.bhex);; Tet File (*.tet);; Binary Tets File (*.btet *.btet.gz);; Hex File (*.hex);; Binary Hex File (*.bhex)') )
-
-        if( mesh_name.endsWith('.btet') or mesh_name.endsWith('.btet.gz') or mesh_name.endsWith('.tet') ):
-            return Data.Mesh.TetMesh( mesh_name.toLocal8Bit().data() )
+        elif fname.endsWith('.pts'): 
+            #return Data.Mesh.PointMesh( fname.toLocal8Bit().data(), False, False )
+            return 0
         
-    
-        if( mesh_name.endsWith('.bhex') or mesh_name.endsWith('.hex') ):
-            return Data.Mesh.HexMesh( mesh_name.toLocal8Bit().data() )
-    
         return 0
 
-    def OpenPointData( pdata )
-        fname_list = QT.QExtendedMainWindow.openListDialog( tr('Load Data Files'), QString('All Data Files (*.pdata *.txt *.sol);;Point Data File (*.pdata);;Text Data Files (*.txt);;Solution File (*.sol)') )
+    def OpenDistanceField(self):
+        fname = QExtendedMainWindow.QExtendedMainWindow.openDialog( tr('Load a Distance Field'), \
+                    'Distance Field File (*.df *.dfield)' )
 
-        for(i = 0; i < fname_list.size(); i++)
+        if fname.endsWith('.dfield') or fname.endsWith('.df'):
+            #return Data.DistanceFieldSet( fname.toLocal8Bit().data() )
+            return 0
+        
+        return 0
 
-            Data.PointData ptmp0 = pdata
-            Data.PointData ptmp1 = Data.PointData( fname_list.at(i).toLocal8Bit().data(), fname_list.at(i).endsWith('.pdata') )
+    def OpenSolidMesh(self):
+        mesh_name = QExtendedMainWindow.QExtendedMainWindow.openDialog( tr('Load an Associated Mesh'), \
+                        'Any (*.tet *.hex *.btet *.btet.gz *.bhex);; Tet File (*.tet);; Binary Tets File (*.btet *.btet.gz);; Hex File (*.hex);; Binary Hex File (*.bhex)')
+
+        if mesh_name.endsWith('.btet') or mesh_name.endsWith('.btet.gz') or mesh_name.endsWith('.tet'):
+            #return Data.Mesh.TetMesh( mesh_name.toLocal8Bit().data() )
+            return 0
     
-            if pdata == 0:
-                pdata = ptmp1
-            else:
-                pdata = Data.PointData( *ptmp0, *ptmp1 )
-                delete ptmp0
-                delete ptmp1
+        if mesh_name.endsWith('.bhex') or mesh_name.endsWith('.hex'):
+            #return Data.Mesh.HexMesh( mesh_name.toLocal8Bit().data() )
+            return 0
+        
+        return 0
+
+    def OpenPointData(self, pdata ):
+        fname_list = QExtendedMainWindow.QExtendedMainWindow.openListDialog( tr('Load Data Files'), \
+                        'All Data Files (*.pdata *.txt *.sol);;Point Data File (*.pdata);;Text Data Files (*.txt);;Solution File (*.sol)') 
+
+        for i in range( 0, fname_list.size(), 1 ):
+            #Data.PointData ptmp0 = pdata
+            #Data.PointData ptmp1 = Data.PointData( fname_list.at(i).toLocal8Bit().data(), fname_list.at(i).endsWith('.pdata') )
+            
+            #if pdata == 0:
+            #    pdata = ptmp1
+            #else:
+            pdata = 0#Data.PointData( *ptmp0, *ptmp1 )
         
         return pdata
 
-    def OpenFiberData():
-        fibs_name = QT.QExtendedMainWindow.openDialog( tr('Load Fiber Data'), QString('Any (*.txt *.fibs);; Fiber File (*.txt);; Binary Fiber File (*.fibs)') )
+    def OpenFiberData(self):
+        fibs_name = QExtendedMainWindow.QExtendedMainWindow.openDialog( tr('Load Fiber Data'),\
+                        'Any (*.txt *.fibs);; Fiber File (*.txt);; Binary Fiber File (*.fibs)') 
 
-        if( fibs_name.endsWith('.txt') or fibs_name.endsWith('.fibs') )
-            return Data.FiberDirectionData( fibs_name.toLocal8Bit().data(), fibs_name.endsWith('.fibs') )
-
+        if fibs_name.endsWith('.txt') or fibs_name.endsWith('.fibs'):
+            #return Data.FiberDirectionData( fibs_name.toLocal8Bit().data(), fibs_name.endsWith('.fibs') )
+            return 0
+            
         return 0

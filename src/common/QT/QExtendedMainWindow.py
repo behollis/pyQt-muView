@@ -81,15 +81,28 @@ class QExtendedMainWindow(QMainWindow):
                 alist[i].setVisible( True )
             else:
                 alist[i].setVisible( False )
-            
-    def cursorOverride(self, shape ):
+     
+    @staticmethod       
+    def cursorOverride(shape ):
         QWidget.setOverrideCursor(shape)
 
-    def cursorRestore(self):
+    @staticmethod
+    def cursorRestore():
         QWidget.restoreOverrideCursor()
+        
+    '''
+    static QString     openDialog(      QString title, QString ftypes );
+    static QString     directoryDialog( QString title );
+    static QStringList openListDialog(  QString title, QString ftypes );
+    static QString     saveDialog(      QString title, QString ftypes );
 
-    def openDialog(self, title, ftypes ):
-
+    static void        cursorOverride( Qt::CursorShape shape );
+    static void        cursorRestore( );
+    '''
+    
+    @staticmethod
+    def openDialog(title, ftypes ):
+        
         options = QFileDialog.DontResolveSymlinks;
         options |= QFileDialog.DontUseNativeDialog;
         
@@ -101,7 +114,8 @@ class QExtendedMainWindow(QMainWindow):
     
         return fname
 
-    def openListDialog(self, title, ftypes ):
+    @staticmethod
+    def openListDialog(title, ftypes ):
         options = QFileDialog.DontResolveSymlinks
         options |= QFileDialog.DontUseNativeDialog
     
@@ -113,7 +127,8 @@ class QExtendedMainWindow(QMainWindow):
     
         return fname_list;
 
-    def directoryDialog(self, title ):
+    @staticmethod
+    def directoryDialog(title ):
         options = QFileDialog.DontResolveSymlinks
         options |= QFileDialog.DontUseNativeDialog
     
@@ -125,7 +140,8 @@ class QExtendedMainWindow(QMainWindow):
     
         return fname
 
-    def saveDialog(self, title, ftypes ):
+    @staticmethod
+    def saveDialog(title, ftypes ):
         options = QFileDialog.DontResolveSymlinks;
         options |= QFileDialog.DontUseNativeDialog;
     
