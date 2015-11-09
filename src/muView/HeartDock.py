@@ -15,7 +15,7 @@
 #include <Data/DistanceField.h>
 
 from PyQt5.QtWidgets import QSplitter, QTableWidget, QDockWidget, QTabWidget 
-from PyQt5.QtWidgets import QControlWidget, QRadioButton, QLabel
+from PyQt5.QtWidgets import QRadioButton, QLabel
 from PyQt5.QtWidgets import QSpinBox, QCheckBox, QPushButton, QWidget, QGridLayout
 from PyQt5.QtCore import Qt, QSize
 from common.QT import QExtendedMainWindow
@@ -78,7 +78,7 @@ class HeartDock(QDockWidget):
                 
         self.setWidget( self.sp_widget )
     
-        drawBoxWidget = QControlWidget()
+        drawBoxWidget = Qt.QControlWidget()
 
         draw0 = drawBoxWidget.addRadioButton( tr('Points')           )
         draw1 = drawBoxWidget.addRadioButton( tr('Network')          )
