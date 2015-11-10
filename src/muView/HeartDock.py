@@ -7,10 +7,10 @@
 
 #include <muView/ParallelCoordinates.h>
 #include <muView/RenderEngine.h>
-#include <QT/QControlWidget.h>
+#include <QT/QConself.trolWidget.h>
 
 
-#include <SCI/Camera/ThirdPersonCameraControls.h>
+#include <SCI/Camera/ThirdPersonCameraConself.trols.h>
 #include <Data/FiberDirectionData.h>
 #include <Data/DistanceField.h>
 
@@ -19,10 +19,11 @@ from PyQt5.QtWidgets import QRadioButton, QLabel
 from PyQt5.QtWidgets import QSpinBox, QCheckBox, QPushButton, QWidget, QGridLayout
 from PyQt5.QtCore import Qt, QSize
 from common.QT import QExtendedMainWindow
+import PyQt5
 
 class HeartDock(QDockWidget):
     def __init__(self, pView=None, _pmesh=None, _smesh=None, _fdata=None, parent=None):
-        #HeartDock(SCI::ThirdPersonCameraControls * pView, Data::Mesh::PointMesh *
+        #HeartDock(SCI::ThirdPersonCameraConself.trols * pView, Data::Mesh::PointMesh *
         # _pmesh, Data::Mesh::SolidMesh * _smesh, Data::FiberDirectionData * _fdata,
         # QWidget *parent = 0);
         super(QDockWidget, self).__init__()
@@ -40,8 +41,6 @@ class HeartDock(QDockWidget):
         self.pr_widget  = None  #ParallelCoordinates * 
         self.render_engine  = None #RenderEngine 
         
-       
-    
         self.init(pView,_pmesh,_smesh,_fdata,parent)
 
     def init(self,pView,_pmesh,_smesh,_fdata,parent):
@@ -78,15 +77,15 @@ class HeartDock(QDockWidget):
                 
         self.setWidget( self.sp_widget )
     
-        drawBoxWidget = Qt.QControlWidget()
+        drawBoxWidget = Qt.QConself.trolWidget()
 
-        draw0 = drawBoxWidget.addRadioButton( tr('Points')           )
-        draw1 = drawBoxWidget.addRadioButton( tr('Network')          )
-        draw2 = drawBoxWidget.addRadioButton( tr('Volume Rendering') )
-        draw3 = drawBoxWidget.addRadioButton( tr('Isosurfacing')     )
-        draw4 = drawBoxWidget.addRadioButton( tr('Distance Field')   )
+        draw0 = drawBoxWidget.addRadioButton('Points')
+        draw1 = drawBoxWidget.addRadioButton('Network')
+        draw2 = drawBoxWidget.addRadioButton('Volume Rendering')
+        draw3 = drawBoxWidget.addRadioButton('Isosurfacing')
+        draw4 = drawBoxWidget.addRadioButton('Distance Field')
 
-        draw0.setChecked(True)
+        draw0.setChecked(self.true)
 
         '''
         draw0.clicked.connect(&(render_engine).setDrawModePoints)
@@ -98,33 +97,33 @@ class HeartDock(QDockWidget):
 
         colorBoxWidget = QWidget()
     
-        color0 = QRadioButton( tr('Dimension Value') )
-        color7 = QRadioButton( tr('Min Value') )
-        color1 = QRadioButton( tr('Mean Value') )
-        color8 = QRadioButton( tr('Max Value') )
-        color2 = QRadioButton( tr('St Dev') )
-        color3 = QRadioButton( tr('Clustering') )
-        color4 = QRadioButton( tr('Isovalue') )
-        color5 = QRadioButton( tr('PCA Painting') )
-        color6 = QRadioButton( tr('Fiber Direction') )
-        color0.setChecked(True)
+        color0 = QRadioButton( 'Dimension Value' )
+        color7 = QRadioButton( 'Min Value' )
+        color1 = QRadioButton( 'Mean Value' )
+        color8 = QRadioButton( 'Max Value' )
+        color2 = QRadioButton( 'St Dev' )
+        color3 = QRadioButton( 'Clustering' )
+        color4 = QRadioButton( 'Isovalue' )
+        color5 = QRadioButton( 'PCA Painting' )
+        color6 = QRadioButton( 'Fiber Direction' )
+        color0.setChecked(self.true)
 
-        dimension_label = QLabel(tr('Dimension'))
+        dimension_label = QLabel('Dimension')
         dimension_spinner = QSpinBox()  
-        dimension_spinner.setRange(0,40)
+        dimension_spinner.seself.trange(0,40)
         dimension_spinner.setValue(0)
 
-        cluster_count_label = QLabel(tr('Clusters'))
+        cluster_count_label = QLabel('Clusters')
         cluster_count_spinner = QSpinBox( )
-        cluster_count_spinner.setRange(2,40)
+        cluster_count_spinner.seself.trange(2,40)
         cluster_count_spinner.setValue( 12 )
 
-        cluster_type = QControlWidget()
+        cluster_type = QConself.trolWidget()
     
-        ct0 = cluster_type.addRadioButton( tr('L2 Norm') )
-        ct1 = cluster_type.addRadioButton( tr('Pearson Correlation') )
-        ct2 = cluster_type.addRadioButton( tr('Histogram Difference') )
-        ct0.setChecked( True )
+        ct0 = cluster_type.addRadioButton( 'L2 Norm' )
+        ct1 = cluster_type.addRadioButton( 'Pearson Correlation' )
+        ct2 = cluster_type.addRadioButton( 'Histogram Difference' )
+        ct0.setChecked( self.true )
         
         '''
         ct0.clicked.connect(&(render_engine).setClusterTypeL2Norm)
@@ -132,25 +131,25 @@ class HeartDock(QDockWidget):
         ct2.clicked.connect(&(render_engine).setClusterTypeHistogram)
         '''
 
-        cluster_iteration_label = QLabel(tr('Iterations'))
+        cluster_iteration_label = QLabel( 'Iterations' )
         cluster_iteration_spinner = QSpinBox( )
-        cluster_iteration_spinner.setRange(1,40)
+        cluster_iteration_spinner.seself.trange(1,40)
         cluster_iteration_spinner.setValue( 5 )
 
-        cluster_histogram = QCheckBox( tr('Histogram') )
-        cluster_histogram.setChecked( True )
+        cluster_histogram = QCheckBox( 'Histogram' )
+        cluster_histogram.setChecked( self.true )
 
-        cluster_recalculate = QPushButton( tr('Recalculate') )
-        pca_sel_color = QPushButton( tr('PCA: Select Paint Color') )
+        cluster_recalculate = QPushButton( self.tr('Recalculate') )
+        pca_sel_color = QPushButton( self.tr('PCA: Select Paint Color') )
 
-        pca_dim0_label = QLabel(tr('PCA X Dimension'))
+        pca_dim0_label = QLabel(self.tr('PCA X Dimension'))
         pca_dim0_spinner = QSpinBox( )
-        pca_dim0_spinner.setRange(0,100)
+        pca_dim0_spinner.seself.trange(0,100)
         pca_dim0_spinner.setValue( 0 )
 
-        pca_dim1_label = QLabel(tr('PCA Y Dimension'))
+        pca_dim1_label = QLabel(self.tr('PCA Y Dimension'))
         pca_dim1_spinner = QSpinBox( )
-        pca_dim1_spinner.setRange(0,100)
+        pca_dim1_spinner.seself.trange(0,100)
         pca_dim1_spinner.setValue( 1 )
 
         '''
@@ -219,7 +218,7 @@ class HeartDock(QDockWidget):
         row+=1;colorLayout.addWidget( pca_dim0_spinner,           row, 2, 1, 1 )
         colorLayout.addWidget( pca_dim1_label,             row,   1, 1, 1 )
         row+=1;colorLayout.addWidget( pca_dim1_spinner,           row, 2, 1, 1 )
-        colorLayout.setRowStretch( row, 1 )
+        colorLayout.seself.trowSself.tretch( row, 1 )
         colorBoxWidget.setLayout( colorLayout )
         
         
@@ -228,10 +227,10 @@ class HeartDock(QDockWidget):
         #render_engine.SetFiberData( selffdata );
         
         self.tb_widget.setTabPosition( self.tb_widget.West )
-        self.tb_widget.addTab( self.drawBoxWidget, tr( 'Draw Mode' ) )
-        self.tb_widget.addTab( self.colorBoxWidget, tr( 'Color Mode' ) )
-        self.tb_widget.addTab( self.isoBoxWidget, tr( 'Isosurfacing' ) )
-        self.tb_widget.addTab( self.clipBoxWidget, tr( 'Clip Planes' ) )
+        self.tb_widget.addTab( self.drawBoxWidget, self.tr( 'Draw Mode' ) )
+        self.tb_widget.addTab( self.colorBoxWidget, self.tr( 'Color Mode' ) )
+        self.tb_widget.addTab( self.isoBoxWidget, self.tr( 'Isosurfacing' ) )
+        self.tb_widget.addTab( self.clipBoxWidget, self.tr( 'Clip Planes' ) )
         
     def GetPointData(self):
         return self.pdata
@@ -269,16 +268,25 @@ class HeartDock(QDockWidget):
     def AddImportedMesh(self, _pmesh, _tdata ):
         #render_engine.AddImportedMesh( _pmesh,_tdata )
         return
+    
+    '''
+    static Data::Mesh::PointMesh    * OpenPointMesh( );
+    static Data::Mesh::SolidMesh    * OpenSolidMesh( );
+    static Data::DistanceFieldSet   * OpenDistanceField( );
+    static Data::PointData          * OpenPointData( Data::PointData * pdata = 0 );
+    static Data::FiberDirectionData * OpenFiberData( );
+    '''
 
-    def OpenPointMesh(self):
-        fname = QExtendedMainWindow.QExtendedMainWindow.openDialog( tr('Load a Point Mesh'), \
+    @staticmethod
+    def OpenPointMesh():
+        fname = QExtendedMainWindow.QExtendedMainWindow.openDialog( 'Load a Point Mesh', \
                     'Any (*.point *.point.gz *.pts);; Point File (*.point);;Compressed Point \
                     File (*.point.gz);; PTS File (*.pts)' )  
     
         # Loading a point data file
         if( fname.endsWith('.point') or fname.endsWith('.point.gz') ):
             return 0
-            #return Data.Mesh.PointMesh( fname.toLocal8Bit().data(), True, fname.endsWith('.gz') )
+            #return Data.Mesh.PointMesh( fname.toLocal8Bit().data(), self.true, fname.endsWith('.gz') )
         # Loading raw pts data file
         elif fname.endsWith('.pts'): 
             #return Data.Mesh.PointMesh( fname.toLocal8Bit().data(), False, False )
@@ -286,8 +294,9 @@ class HeartDock(QDockWidget):
         
         return 0
 
-    def OpenDistanceField(self):
-        fname = QExtendedMainWindow.QExtendedMainWindow.openDialog( tr('Load a Distance Field'), \
+    @staticmethod
+    def OpenDistanceField():
+        fname = QExtendedMainWindow.QExtendedMainWindow.openDialog( 'Load a Distance Field', \
                     'Distance Field File (*.df *.dfield)' )
 
         if fname.endsWith('.dfield') or fname.endsWith('.df'):
@@ -296,8 +305,9 @@ class HeartDock(QDockWidget):
         
         return 0
 
-    def OpenSolidMesh(self):
-        mesh_name = QExtendedMainWindow.QExtendedMainWindow.openDialog( tr('Load an Associated Mesh'), \
+    @staticmethod
+    def OpenSolidMesh():
+        mesh_name = QExtendedMainWindow.QExtendedMainWindow.openDialog( 'Load an Associated Mesh', \
                         'Any (*.tet *.hex *.btet *.btet.gz *.bhex);; Tet File (*.tet);; Binary Tets File (*.btet *.btet.gz);; Hex File (*.hex);; Binary Hex File (*.bhex)')
 
         if mesh_name.endsWith('.btet') or mesh_name.endsWith('.btet.gz') or mesh_name.endsWith('.tet'):
@@ -310,8 +320,9 @@ class HeartDock(QDockWidget):
         
         return 0
 
-    def OpenPointData(self, pdata ):
-        fname_list = QExtendedMainWindow.QExtendedMainWindow.openListDialog( tr('Load Data Files'), \
+    @staticmethod
+    def OpenPointData(pdata ):
+        fname_list = QExtendedMainWindow.QExtendedMainWindow.openListDialog( 'Load Data Files', \
                         'All Data Files (*.pdata *.txt *.sol);;Point Data File (*.pdata);;Text Data Files (*.txt);;Solution File (*.sol)') 
 
         for i in range( 0, fname_list.size(), 1 ):
@@ -325,8 +336,9 @@ class HeartDock(QDockWidget):
         
         return pdata
 
-    def OpenFiberData(self):
-        fibs_name = QExtendedMainWindow.QExtendedMainWindow.openDialog( tr('Load Fiber Data'),\
+    @staticmethod
+    def OpenFiberData():
+        fibs_name = QExtendedMainWindow.QExtendedMainWindow.openDialog( 'Load Fiber Data',\
                         'Any (*.txt *.fibs);; Fiber File (*.txt);; Binary Fiber File (*.fibs)') 
 
         if fibs_name.endsWith('.txt') or fibs_name.endsWith('.fibs'):

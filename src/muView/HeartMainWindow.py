@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QAction, QMenu, QApplication
 import numpy as np
-
+from PyQt5.QtCore import Qt
 from common.QT.QExtendedMainWindow import QExtendedMainWindow
 from HeartDock import HeartDock
 
@@ -89,34 +89,33 @@ class MainWindow(QExtendedMainWindow):
         Data::Mesh::PointMesh    * pmesh = 0
         Data::PointData          * pdata = 0
         Data::FiberDirectionData * fdata = 0
-        
-        
-        pmesh = HeartDock::OpenPointMesh( )
-        
-        if( pmesh ){
-            smesh = HeartDock::OpenSolidMesh( )
-        }
-        
-        
-        if( smesh ){
-            fdata = HeartDock::OpenFiberData( )
-            pdata = HeartDock::OpenPointData( )
-        }
-        
-        if( pdata ){
-            addDockWidget( Qt::RightDockWidgetArea, cur_dock = new HeartDock(&view, pmesh, smesh, fdata, this ) )
-            cur_dock.SetPointData( pdata )
-            save_mesh.setEnabled(True)
-            save_data.setEnabled(True)
-        }
-        
-        else{
-            if(pmesh) delete pmesh
-            if(smesh) delete smesh
-            if(pdata) delete pdata
-            if(fdata) delete fdata
-        }
         '''
+        
+        pmesh = HeartDock.OpenPointMesh()
+        
+        if pmesh:
+            smesh = HeartDock.OpenSolidMesh()
+        
+        if smesh:
+            fdata = HeartDock.OpenFiberData()
+            pdata = HeartDock.OpenPointData()
+        
+        if pdata:
+            self.cur_dock = HeartDock()
+            #self.cur_dock = HeartDock(view, pmesh, smesh, fdata, self )
+            self.addDockWidget( Qt.RightDockWidgetArea, self.cur_dock )
+            self.cur_dock.SetPointData( pdata )
+            self.save_mesh.setEnabled(True)
+            self.save_data.setEnabled(True)       
+        else:
+            if pmesh: 
+                pmesh = None
+            if smesh: 
+                smesh = None
+            if pdata: 
+                pdata = None
+            if fdata: 
+                fdata = None
         
         QApplication.restoreOverrideCursor()
 
@@ -128,21 +127,19 @@ class MainWindow(QExtendedMainWindow):
         #    QApplication::setOverrideCursor(Qt::WaitCursor)
         #endif
     
-        '''
-        Data::Mesh::SolidMesh    * smesh = 0
-        Data::Mesh::PointMesh    * pmesh = 0
+        smesh = 0 #Data::Mesh::SolidMesh
+        pmesh = 0 #Data::Mesh::PointMesh
         
-        pmesh = HeartDock::OpenPointMesh( )
+        pmesh = HeartDock.OpenPointMesh()
     
-        if( pmesh ){
-            smesh = HeartDock::OpenSolidMesh( )
-            ((HeartDock*)cur_dock).AddImportedMesh( pmesh, smesh )
-        }
-        else{
-            if(pmesh) delete pmesh
-            if(smesh) delete smesh
-        }
-        '''
+        if pmesh:
+            smesh = HeartDock.OpenSolidMesh( )
+            self.cur_dock.AddImportedMesh( pmesh, smesh )
+        else:
+            if pmesh: 
+                pmesh = 0
+            if smesh: 
+                smesh = 0
     
         QApplication.restoreOverrideCursor()
 
@@ -152,14 +149,14 @@ class MainWindow(QExtendedMainWindow):
         #endif
     
         if self.cur_dock != 0 :
-            pdata = None#HeartDock.OpenPointData( cur_dock.GetPointData() )
+            pdata = HeartDock.OpenPointData( self.cur_dock.GetPointData() )
             if pdata: self.cur_dock.SetPointData( pdata )
     
         QApplication.restoreOverrideCursor()
 
 
     def open_dist_field_file(self):
-        dfield = None#HeartDock.OpenDistanceField()
+        dfield = HeartDock.OpenDistanceField()
         if dfield: self.cur_dock.SetDistanceFieldData( dfield )
 
 

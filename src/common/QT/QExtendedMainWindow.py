@@ -106,7 +106,8 @@ class QExtendedMainWindow(QMainWindow):
         options = QFileDialog.DontResolveSymlinks;
         options |= QFileDialog.DontUseNativeDialog;
         
-        dir   = QSettings().value('workingDirectory').toString()
+        #dir = QSettings('workingDirectory')
+        dir = 'workingDirectory'
         fname = QFileDialog.getOpenFileName( 0, title, dir, ftypes, 0, options )
     
         if fname.size() > 0:
