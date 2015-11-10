@@ -1,21 +1,11 @@
-#ifndef QT_QCONTROLWIDGET_H
-#define QT_QCONTROLWIDGET_H
-
-#include <QWidget>
-#include <QGridLayout>
-#include <QRadioButton>
-#include <QLabel>
-#include <QDoubleSpinBox>
-#include <QCheckBox>
-#include <QPushButton>
-#include <QGroupBox>
-#include <QMenuBar>
-#include <QSlider>
+from PyQt5.QWidgets import QWidget, QGridLayout, QRadioButton, QLabel, QDoubleSpinBox, QCheckBox
+from PyQt5.QWidgets import QPushButton, QGroupBox, QMenuBar, QSlider
+from PyQt.QWidgets import QMenuBar, QSpinBox, QSlider
+from common.QT import *
+from PyQt5.Qt import Horizontal
 
 #include <QT/QDoubleSlider.h>
 #include <QT/QExtendedVerticalSlider.h>
-
-    #class QGroupControlWidget
 
 class QControlWidget(QWidget):
     def __init__(self):
@@ -23,7 +13,114 @@ class QControlWidget(QWidget):
     
         self.layout = None
         self.row = None
-        mb = None 
+        self.mb = None 
+        
+        self.init()
+    
+    def init(self):
+        self.layout = QGridLayout( )
+        self.setLayout( self.layout )
+        self.row = 0
+
+        self.mb = QMenuBar( self )
+        self.row += 1; self.layout.addWidget(self.mb, self.row, 0, 1, 2 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row,   1 )
+        
+    def menuBar(self):
+        return self.mb
+    
+    def addRadioButton(self, title ):
+        rb = QRadioButton( title )
+        self.row += 1; self.layout.addWidget(rb, self.row, 0, 1, 2 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row, 1 )
+        return rb
+    
+    def addIntSpinBox(self, label ):
+        lbl = QLabel(label)
+        spn = QSpinBox()
+        self.layout.addWidget(lbl, self.row,   0, 1, 1 )
+        self.row += 1; self.layout.addWidget(spn, self.row, 1, 1, 1 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row,   1 )
+        return spn
+    
+    def addDblSpinBox(self, label ):
+        lbl = QLabel(label)
+        spn = QDoubleSpinBox( )
+        self.layout.addWidget(lbl, self.row,   0, 1, 1 )
+        self.row += 1; self.layout.addWidget(spn, self.row, 1, 1, 1 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row, 1 )
+        return spn
+    
+    def addHorizontalSlider(self, label ):
+        lbl = QLabel(label)
+        sld = QSlider( Horizontal )
+        self.layout.addWidget(lbl, self.row, 0, 1, 1 )
+        self.row += 1; self.layout.addWidget(sld, self.row, 1, 1, 1 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row, 1 )
+        return sld
+    
+    def addVerticalSlider(self, label ):
+        '''
+        sld = QT.QExtendedVerticalSlider( label )
+        self.row += 1; self.layout.addWidget( sld, self.row, 0, 1, 2 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( row, 1 )
+    
+        return sld
+        '''
+        
+        return None
+    
+    def addHorizontalDoubleSlider(self, label ):
+        lbl = QLabel(label)
+        '''
+        sld = QT.QDoubleSlider( Qt.Horizontal )
+        self.layout.addWidget(lbl,row,   0, 1, 1 )
+        self.row += 1; self.layout.addWidget(sld,row++, 1, 1, 1 )
+        self.row -= 1; self.layout.setRowStretch( row-1, 0 )
+        self.layout.setRowStretch( row,   1 )
+        return sld
+        '''
+        return None
+    
+    def addVerticalDoubleSlider(self, label ):
+        lbl = QLabel(label)
+        '''
+        sld = QT.QDoubleSlider( Qt.Vertical )
+        self.layout.addWidget(lbl, self.row,   0, 1, 1 )
+        self.row += 1; self.layout.addWidget(sld, self.row, 1, 1, 1 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row,   1 )
+        return sld
+        '''
+        
+        return None
+    
+    def addCheckbox(self, label ):
+        chk = QCheckBox( label )
+        self.row += 1; self.layout.addWidget( chk, self.row, 0, 1, 2 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row, 1 )
+        return chk
+    
+    def addButton( self, label ):
+        btn = QPushButton( label )
+        self.row += 1; self.layout.addWidget( btn, self.row, 0, 1, 2 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row, 1 )
+        return btn
+    
+    def addGroupControlWidget( self, title ):
+        gcw = QGroupControlWidget( title )
+        self.row += 1; self.layout.addWidget( gcw, self.row, 0, 1, 2 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row, 1 )
+        return gcw
 
 class QGroupControlWidget(QGroupBox):
     def __init__(self):
@@ -31,184 +128,40 @@ class QGroupControlWidget(QGroupBox):
 
         self.layout = None #QGroupLayout
         self.row = None #int
-'''
-**  Common QT Extensions Library
-**  Copyright (C) 2013  Paul Rosen
-**
-**  This program is free software: you can redistribute it and/or modify
-**  it under the terms of the GNU General Public License as published by
-**  the Free Software Foundation, version 3 of the License, or
-**  (at your option) any later version.
-**
-**  This program is distributed in the hope that it will be useful,
-**  but WITHOUT ANY WARRANTY; without even the implied warranty of
-**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-**  GNU General Public License for more details.
-**
-**  You should have received a copy of the GNU General Public License
-**  along with self program.  If not, see <http:#www.gnu.org/licenses/>.
-'''
+        
+        self.init()
 
-#include <QT/QControlWidget.h>
-#include <QMenuBar>
-
-QT.QControlWidget.QControlWidget( QWidget * parent ) : QWidget( parent ){
-    layout = QGridLayout( )
-    setLayout( layout )
-    row = 0
-
-    mb = QMenuBar( self )
-    layout.addWidget(mb, row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-}
-
-QMenuBar * QT.QControlWidget.menuBar(){
-    return mb
-}
-
-QRadioButton * QT.QControlWidget.addRadioButton( QString title ){
-    QRadioButton rb = QRadioButton( title )
-    layout.addWidget(rb, row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return rb
-}
-
-QSpinBox * QT.QControlWidget.addIntSpinBox ( QString label ){
-    QLabel   lbl = QLabel(label)
-    QSpinBox spn = QSpinBox( )
-    layout.addWidget(lbl,row,   0, 1, 1 )
-    layout.addWidget(spn,row++, 1, 1, 1 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return spn
-}
-
-QDoubleSpinBox * QT.QControlWidget.addDblSpinBox( QString label ){
-    QLabel         lbl = QLabel(label)
-    QDoubleSpinBox spn = QDoubleSpinBox( )
-    layout.addWidget(lbl,row,   0, 1, 1 )
-    layout.addWidget(spn,row++, 1, 1, 1 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return spn
-}
-
-QSlider * QT.QControlWidget.addHorizontalSlider( QString label ){
-    QLabel  lbl = QLabel(label)
-    QSlider sld = QSlider( Qt.Horizontal )
-    layout.addWidget(lbl,row,   0, 1, 1 )
-    layout.addWidget(sld,row++, 1, 1, 1 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return sld
-}
-
-QT.QExtendedVerticalSlider * QT.QControlWidget.addVerticalSlider( QString label ){
-    '''
-    QLabel  lbl = QLabel(label)
-    QLabel  lbl_min = QLabel(tr("min"))
-    QLabel  lbl_max = QLabel(tr("max"))
-    QSlider sld = QSlider( Qt.Vertical )
-
-    layout.addWidget(lbl,row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-
-    layout.addWidget(sld,row, 0, 4, 1, Qt.AlignRight )
-    layout.addWidget(lbl_max,row, 1, 1, 1 )
-    layout.addWidget(lbl_min,row+3, 1, 1, 1 )
-    row+=4
-    layout.setRowStretch( row,   1 )
-    '''
-    QT.QExtendedVerticalSlider sld = QT.QExtendedVerticalSlider( label )
-    layout.addWidget    ( sld, row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-
-    return sld
-}
-
-QT.QDoubleSlider * QT.QControlWidget.addHorizontalDoubleSlider( QString label ){
-    QLabel            lbl = QLabel(label)
-    QT.QDoubleSlider sld = QT.QDoubleSlider( Qt.Horizontal )
-    layout.addWidget(lbl,row,   0, 1, 1 )
-    layout.addWidget(sld,row++, 1, 1, 1 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return sld
-}
-
-QT.QDoubleSlider * QT.QControlWidget.addVerticalDoubleSlider( QString label ){
-    QLabel            lbl = QLabel(label)
-    QT.QDoubleSlider sld = QT.QDoubleSlider( Qt.Vertical )
-    layout.addWidget(lbl,row,   0, 1, 1 )
-    layout.addWidget(sld,row++, 1, 1, 1 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return sld
-}
-
-QCheckBox * QT.QControlWidget.addCheckbox(  QString label ){
-    QCheckBox chk = QCheckBox( label )
-    layout.addWidget( chk, row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return chk
-}
-
-QPushButton * QT.QControlWidget.addButton(  QString label ){
-    QPushButton btn = QPushButton( label )
-    layout.addWidget( btn, row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return btn
-}
-
-QT.QGroupControlWidget * QT.QControlWidget.addGroupControlWidget( QString title ){
-    QT.QGroupControlWidget gcw = QGroupControlWidget( title )
-    layout.addWidget( gcw, row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return gcw
-}
-
-QT.QGroupControlWidget.QGroupControlWidget( QString title, * parent ) : QGroupBox( title, parent ){
-    layout = QGridLayout( )
-    setLayout( layout )
-    row = 0
-}
-
-QRadioButton * QT.QGroupControlWidget.addRadioButton( QString title ){
-    QRadioButton rb = QRadioButton( title )
-    layout.addWidget(rb, row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return rb
-}
-
-QDoubleSpinBox * QT.QGroupControlWidget.addSpinBox( QString label ){
-    QLabel         lbl = QLabel(label)
-    QDoubleSpinBox spn = QDoubleSpinBox( )
-    layout.addWidget(lbl,row,   0, 1, 1 )
-    layout.addWidget(spn,row++, 1, 1, 1 )
-    layout.setRowStretch( row, 1 )
-    return spn
-}
-
-QCheckBox * QT.QGroupControlWidget.addCheckbox(  QString label ){
-    QCheckBox chk = QCheckBox( label )
-    layout.addWidget( chk, row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return chk
-}
-
-QPushButton * QT.QGroupControlWidget.addButton(  QString label ){
-    QPushButton btn = QPushButton( label )
-    layout.addWidget( btn, row++, 0, 1, 2 )
-    layout.setRowStretch( row-1, 0 )
-    layout.setRowStretch( row,   1 )
-    return btn
-}
-
+    def init( self, title, parent ):
+        self.layout = QGridLayout()
+        self.setLayout( self.layout )
+        self.row = 0
+    
+    def addRadioButton( self, title ):
+        rb = QRadioButton( title )
+        self.row += 1; self.layout.addWidget(rb, self.row, 0, 1, 2 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row, 1 )
+        return rb
+    
+    def addSpinBox( self, label ):
+        lbl = QLabel(label)
+        spn = QDoubleSpinBox( )
+        self.layout.addWidget(lbl, self.row,   0, 1, 1 )
+        self.row += 1; self.layout.addWidget(spn, self.row, 1, 1, 1 )
+        self.layout.setRowStretch( self.row, 1 )
+        return spn
+    
+    def addCheckbox( self, label ):
+        chk = QCheckBox( label )
+        self.row += 1; self.layout.addWidget( chk, self.row, 0, 1, 2 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row, 1 )
+        return chk
+    
+    def addButton( self, label ):
+        btn = QPushButton( label )
+        self.row += 1; self.layout.addWidget( btn, self.row, 0, 1, 2 )
+        self.row -= 1; self.layout.setRowStretch( self.row, 0 )
+        self.layout.setRowStretch( self.row, 1 )
+        return btn
+    
