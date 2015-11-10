@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import QSplitter, QTableWidget, QDockWidget, QTabWidget
 from PyQt5.QtWidgets import QRadioButton, QLabel
 from PyQt5.QtWidgets import QSpinBox, QCheckBox, QPushButton, QWidget, QGridLayout
 from PyQt5.QtCore import Qt, QSize
-from common.QT import QExtendedMainWindow
+from common.QT import QExtendedMainWindow, QControlWidget
 import PyQt5
 
 class HeartDock(QDockWidget):
@@ -71,13 +71,13 @@ class HeartDock(QDockWidget):
         
         self.vp_widget.addWidget( sp0 )
         self.vp_widget.addWidget( sp1 )
-        self.vp_widget.addWidget( self.pr_widget )
+#        self.vp_widget.addWidget( self.pr_widget )
         self.sp_widget.addWidget( self.vp_widget )
         self.sp_widget.addWidget( self.tb_widget )
                 
         self.setWidget( self.sp_widget )
     
-        drawBoxWidget = Qt.QConself.trolWidget()
+        drawBoxWidget = QControlWidget()
 
         draw0 = drawBoxWidget.addRadioButton('Points')
         draw1 = drawBoxWidget.addRadioButton('Network')
@@ -118,12 +118,12 @@ class HeartDock(QDockWidget):
         cluster_count_spinner.seself.trange(2,40)
         cluster_count_spinner.setValue( 12 )
 
-        cluster_type = QConself.trolWidget()
+        cluster_type = QControlWidget()
     
-        ct0 = cluster_type.addRadioButton( 'L2 Norm' )
-        ct1 = cluster_type.addRadioButton( 'Pearson Correlation' )
-        ct2 = cluster_type.addRadioButton( 'Histogram Difference' )
-        ct0.setChecked( self.true )
+        #ct0 = cluster_type.addRadioButton( 'L2 Norm' )
+        #ct1 = cluster_type.addRadioButton( 'Pearson Correlation' )
+        #ct2 = cluster_type.addRadioButton( 'Histogram Difference' )
+        #ct0.setChecked( self.true )
         
         '''
         ct0.clicked.connect(&(render_engine).setClusterTypeL2Norm)
@@ -206,7 +206,7 @@ class HeartDock(QDockWidget):
         row+=1;colorLayout.addWidget( cluster_histogram,          row, 1, 1, 2 )
         colorLayout.addWidget( cluster_count_label,        row,   1, 1, 1 )
         row+=1;colorLayout.addWidget( cluster_count_spinner,      row, 2, 1, 1 )
-        row+=1;colorLayout.addWidget( cluster_type,               row, 1, 1, 1 )
+        #row+=1;colorLayout.addWidget( cluster_type,               row, 1, 1, 1 )
         colorLayout.addWidget( cluster_iteration_label,    row,   1, 1, 1 )
         row+=1;colorLayout.addWidget( cluster_iteration_spinner,  row, 2, 1, 1 )
         row+=1;colorLayout.addWidget( cluster_recalculate,        row, 1, 1, 2 )
