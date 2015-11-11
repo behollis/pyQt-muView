@@ -1,8 +1,8 @@
-from PyQt5.QWidgets import QWidget, QGridLayout, QRadioButton, QLabel, QDoubleSpinBox, QCheckBox
-from PyQt5.QWidgets import QPushButton, QGroupBox, QMenuBar, QSlider
-from PyQt.QWidgets import QMenuBar, QSpinBox, QSlider
+from PyQt5.QtWidgets import QWidget, QGridLayout, QRadioButton, QLabel, QDoubleSpinBox, QCheckBox
+from PyQt5.QtWidgets import QPushButton, QGroupBox, QMenuBar, QSlider
+from PyQt5.QtWidgets import QMenuBar, QSpinBox, QSlider
 from common.QT import *
-from PyQt5.Qt import Horizontal
+from PyQt5 import Qt
 
 #include <QT/QDoubleSlider.h>
 #include <QT/QExtendedVerticalSlider.h>
@@ -25,7 +25,7 @@ class QControlWidget(QWidget):
         self.mb = QMenuBar( self )
         self.row += 1; self.layout.addWidget(self.mb, self.row, 0, 1, 2 )
         self.row -= 1; self.layout.setRowStretch( self.row, 0 )
-        self.layout.setRowStretch( self.row,   1 )
+        self.layout.setRowStretch( self.row, 1 )
         
     def menuBar(self):
         return self.mb
@@ -57,7 +57,7 @@ class QControlWidget(QWidget):
     
     def addHorizontalSlider(self, label ):
         lbl = QLabel(label)
-        sld = QSlider( Horizontal )
+        sld = QSlider( Qt.Horizontal )
         self.layout.addWidget(lbl, self.row, 0, 1, 1 )
         self.row += 1; self.layout.addWidget(sld, self.row, 1, 1, 1 )
         self.row -= 1; self.layout.setRowStretch( self.row, 0 )
@@ -123,13 +123,13 @@ class QControlWidget(QWidget):
         return gcw
 
 class QGroupControlWidget(QGroupBox):
-    def __init__(self):
+    def __init__(self, title = None, parent = None):
         super(QGroupBox, self).__init__()
 
         self.layout = None #QGroupLayout
         self.row = None #int
         
-        self.init()
+        self.init(title, parent)
 
     def init( self, title, parent ):
         self.layout = QGridLayout()

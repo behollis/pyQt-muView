@@ -38,7 +38,7 @@ class HeartDock(QDockWidget):
         self.vp_widget  = None  #QSplitter           * 
         self.tb_widget  = None  #QTabWidget          * 
         
-        self.pr_widget  = None  #ParallelCoordinates * 
+        #self.pr_widget  = None  #ParallelCoordinates * 
         self.render_engine  = None #RenderEngine 
         
         self.init(pView,_pmesh,_smesh,_fdata,parent)
@@ -77,7 +77,7 @@ class HeartDock(QDockWidget):
                 
         self.setWidget( self.sp_widget )
     
-        drawBoxWidget = QControlWidget()
+        drawBoxWidget = QControlWidget.QGroupControlWidget()
 
         draw0 = drawBoxWidget.addRadioButton('Points')
         draw1 = drawBoxWidget.addRadioButton('Network')
@@ -85,7 +85,7 @@ class HeartDock(QDockWidget):
         draw3 = drawBoxWidget.addRadioButton('Isosurfacing')
         draw4 = drawBoxWidget.addRadioButton('Distance Field')
 
-        draw0.setChecked(self.true)
+        draw0.setChecked(True)
 
         '''
         draw0.clicked.connect(&(render_engine).setDrawModePoints)
@@ -106,19 +106,20 @@ class HeartDock(QDockWidget):
         color4 = QRadioButton( 'Isovalue' )
         color5 = QRadioButton( 'PCA Painting' )
         color6 = QRadioButton( 'Fiber Direction' )
-        color0.setChecked(self.true)
+        color0.setChecked(True)
 
         dimension_label = QLabel('Dimension')
         dimension_spinner = QSpinBox()  
-        dimension_spinner.seself.trange(0,40)
+        dimension_spinner.setRange(0,40)
         dimension_spinner.setValue(0)
+        
 
         cluster_count_label = QLabel('Clusters')
         cluster_count_spinner = QSpinBox( )
-        cluster_count_spinner.seself.trange(2,40)
+        cluster_count_spinner.setRange(2,40)
         cluster_count_spinner.setValue( 12 )
 
-        cluster_type = QControlWidget()
+        cluster_type = QControlWidget.QControlWidget()
     
         #ct0 = cluster_type.addRadioButton( 'L2 Norm' )
         #ct1 = cluster_type.addRadioButton( 'Pearson Correlation' )
@@ -133,23 +134,23 @@ class HeartDock(QDockWidget):
 
         cluster_iteration_label = QLabel( 'Iterations' )
         cluster_iteration_spinner = QSpinBox( )
-        cluster_iteration_spinner.seself.trange(1,40)
+        cluster_iteration_spinner.setRange(1,40)
         cluster_iteration_spinner.setValue( 5 )
 
         cluster_histogram = QCheckBox( 'Histogram' )
-        cluster_histogram.setChecked( self.true )
+        cluster_histogram.setChecked( True )
 
         cluster_recalculate = QPushButton( self.tr('Recalculate') )
         pca_sel_color = QPushButton( self.tr('PCA: Select Paint Color') )
 
         pca_dim0_label = QLabel(self.tr('PCA X Dimension'))
         pca_dim0_spinner = QSpinBox( )
-        pca_dim0_spinner.seself.trange(0,100)
+        pca_dim0_spinner.setRange(0,100)
         pca_dim0_spinner.setValue( 0 )
 
         pca_dim1_label = QLabel(self.tr('PCA Y Dimension'))
         pca_dim1_spinner = QSpinBox( )
-        pca_dim1_spinner.seself.trange(0,100)
+        pca_dim1_spinner.setRange(0,100)
         pca_dim1_spinner.setValue( 1 )
 
         '''
@@ -172,6 +173,7 @@ class HeartDock(QDockWidget):
         cluster_histogram.clicked.connect(&(render_engine).setClusterHistogram)
         '''
 
+        '''
         color0.clicked.connect(self.pr_widget.Reset)
         color1.clicked.connect(self.pr_widget.Reset)
         color2.clicked.connect(self.pr_widget.Reset)
@@ -181,13 +183,14 @@ class HeartDock(QDockWidget):
         color6.clicked.connect(self.pr_widget.Reset)
         color7.clicked.connect(self.pr_widget.Reset)
         color8.clicked.connect(self.pr_widget.Reset)
+        '''
 
-        dimension_spinner.valueChanged.connect(self.pr_widget.Reset)
+        #dimension_spinner.valueChanged.connect(self.pr_widget.Reset)
 
-        cluster_count_spinner.valueChanged.connect(self.pr_widget.Reset)
-        cluster_iteration_spinner.valueChanged.connect(self.pr_widget.Reset)
-        cluster_recalculate.clicked.connect(self.pr_widget.Reset)
-        cluster_histogram.clicked.connect(self.pr_widget.Reset)
+        #cluster_count_spinner.valueChanged.connect(self.pr_widget.Reset)
+        #cluster_iteration_spinner.valueChanged.connect(self.pr_widget.Reset)
+        #cluster_recalculate.clicked.connect(self.pr_widget.Reset)
+        #cluster_histogram.clicked.connect(self.pr_widget.Reset)
 
 #        pca_dim0_spinner.valueChanged.connect(&(render_engine.pca).ModifyPCADim0)
 #        pca_dim1_spinner.valueChanged.connect(&(render_engine.pca).ModifyPCADim1)
@@ -218,7 +221,7 @@ class HeartDock(QDockWidget):
         row+=1;colorLayout.addWidget( pca_dim0_spinner,           row, 2, 1, 1 )
         colorLayout.addWidget( pca_dim1_label,             row,   1, 1, 1 )
         row+=1;colorLayout.addWidget( pca_dim1_spinner,           row, 2, 1, 1 )
-        colorLayout.seself.trowSself.tretch( row, 1 )
+        colorLayout.setRowStretch( row, 1 )
         colorBoxWidget.setLayout( colorLayout )
         
         
@@ -227,10 +230,10 @@ class HeartDock(QDockWidget):
         #render_engine.SetFiberData( selffdata );
         
         self.tb_widget.setTabPosition( self.tb_widget.West )
-        self.tb_widget.addTab( self.drawBoxWidget, self.tr( 'Draw Mode' ) )
-        self.tb_widget.addTab( self.colorBoxWidget, self.tr( 'Color Mode' ) )
-        self.tb_widget.addTab( self.isoBoxWidget, self.tr( 'Isosurfacing' ) )
-        self.tb_widget.addTab( self.clipBoxWidget, self.tr( 'Clip Planes' ) )
+        self.tb_widget.addTab( drawBoxWidget, self.tr( 'Draw Mode' ) )
+        self.tb_widget.addTab( colorBoxWidget, self.tr( 'Color Mode' ) )
+        #self.tb_widget.addTab( isoBoxWidget, self.tr( 'Isosurfacing' ) )
+        #self.tb_widget.addTab( clipBoxWidget, self.tr( 'Clip Planes' ) )
         
     def GetPointData(self):
         return self.pdata
