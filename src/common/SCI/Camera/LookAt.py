@@ -4,6 +4,8 @@
 #define DEG2RAD(deg) ((deg)/180.0f*3.14159265f)
 #define RAD2DEG(rad) ((rad)*180.0f/3.14159265f)
 
+import numpy as np
+
 class LookAt():
     def __init__(self):
         self.mat    #Mat4
@@ -15,59 +17,78 @@ class LookAt():
     def init(self):   
         None
     
-    def LookAt(self):
-        mat.LoadIdentity()
-        imat.LoadIdentity()
-        eye.Set(0,0,0)
-        center.Set(0,0,-1)
-        up.Set(0,1,0)
-    
-    def LookAt(self,eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ):
-        Vex3 _eye(eyeX,eyeY,eyeZ)
-        Vex3 _center(centerX,centerY,centerZ)
-        Vex3 _up(upX,upY,upZ)
+    def LookAt(self,eyeX=None, eyeY=None, eyeZ=None, centerX=None, \
+               centerY=None, centerZ=None, upX=None, upY=None, upZ=None):
         
-        Set(_eye,_center,_up)
-    
-    def LookAt(self, _eye, _center, _up):
-        Set(_eye,_center,_up)
-    
-    
+        if eyeX == None and centerX == None and upX == None :
+            self.mat.LoadIdentity()
+            self.imat.LoadIdentity()
+            self.eye = np.ndarray[(0,0,0)]
+            self.center = np.ndarray[(0,0,-1)]
+            self.up = np.ndarray[(0,1,0)]
+        else:
+            self._eye = np.array([eyeX,eyeY,eyeZ])
+            self._center = np.array([centerX,centerY,centerZ])
+            self._up = np.array([upX,upY,upZ])
+        
+        self.Set(self._eye,self._center,self._up)
+   
+    '''
     def Set(self, eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ):
-        Vex3 _eye(eyeX,eyeY,eyeZ)
+        eye(eyeX,eyeY,eyeZ)
         Vex3 _center(centerX,centerY,centerZ)
         Vex3 _up(upX,upY,upZ)
+    '''
     
+    '''
     def Set(self, _eye,_center,_up):
-        None
+        self.eye = _eye
+        self.center = _center
+        self.up = _up
+    '''
     
     def Set(self, _eye, _center, _up):
         eye = _eye
         center = _center
         up = _up
         
-        f = (center - eye).UnitVector()
+        # find unit vector 
+        f = np.linalg.norm( self.center - self.eye ) 
         
-        up.Normalize()
+        # normalize
+        up = np.linalg.norm( up )
         
-        s = cross(f, up)
-        u = cross(s, f)
+        s = np.cross(f, up)
+        u = np.cross(s, f)
         
-        Mat4 mtmp
+        mtmp = np.ndarray([0.,0.,0.,0.], \
+                          [0.,0.,0.,0.], \
+                          [0.,0.,0.,0.], \
+                          [0.,0.,0.,0.] )
         
-        mtmp.Row(0,Vex4( s,0))
-        mtmp.Row(1,Vex4( u,0))
-        mtmp.Row(2,Vex4(-f,0))
-        mtmp.Row(3,Vex4(0,0,0,1))
+        mtmp[0:] = np.concatenate(s, 0)  #mtmp.Row(0,Vex4( s,0)) 
+        mtmp[1:] = np.concatenate(u, 0)  #mtmp.Row(1,Vex4( u,0))
+        mtmp[2:] = np.concatenate(-f, 0) #mtmp.Row(2,Vex4(-f,0))
+        mtmp[3:] = np.concatenate([0,0,0], 0)   #mtmp.Row(3,Vex4(0,0,0,1))
         
-        mat  = mtmp * Mat4(Mat4.MAT4_TRANSLATE,-eye.x,-eye.y,-eye.z)
-        imat = mat.Inverse()
+        #mat  = mtmp * np.ndarray Mat4(Mat4.MAT4_TRANSLATE,-eye.x,-eye.y,-eye.z)
+        mat = np.ndarray([0.,0.,0.,0.], \
+                          [0.,0.,0.,0.], \
+                          [0.,0.,0.,0.], \
+                          [0.,0.,0.,0.] )
+        self.imat = np.linalg.inv(mat)
     
     def Get(self, _eye, _center, _up):
+        
+        '''
         _eye = eye
         _center = center
         _up = up
+        '''
+        
+        return self.eye, self.center, self.up
     
+    '''
     def Get(self, eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ):
         eyeX = eye.x
         eyeY = eye.y
@@ -80,6 +101,7 @@ class LookAt():
         upX = up.x
         upY = up.y
         upZ = up.z
+    '''
     
     '''
     def LookAt.operator=(LookAt& other){
@@ -87,55 +109,55 @@ class LookAt():
     return (*self)
     }
     '''
-    
+
     def MoveForward(self, amt):
-        md = (center - eye).UnitVector() * amt
-        Set(eye+md,center+md,up)
+        md = np.linalg.norm(self.center - self.eye) * amt
+        self.Set(self.eye+md,self.center+md,self.up)
     
     def MoveBackward(self, amt):
-        md = (center - eye).UnitVector() * amt
-        Set(eye-md,center-md,up)
+        md = np.linalg.norm(self.center - self.eye) * amt
+        self.Set(self.eye-md,self.center-md,self.up)
     
     def MoveLeft(self, amt):
-        md = cross(up,(center - eye)).UnitVector() * amt
-        Set(eye+md,center+md,up)
+        md = np.linalg.norm( np.cross(self.up,(self.center - self.eye)) ) * amt
+        self.Set(self.eye+md,self.center+md,self.up)
     
     def MoveRight(self, amt):
-        md = cross(up,(center - eye)).UnitVector() * amt
-        Set(eye-md,center-md,up)
+        md = np.cross( self.up, (self.center - self.eye) ) * amt
+        self.Set(self.eye-md,self.center-md,self.up)
         
     def MoveUp(self, amt):
-        md0 = cross(up,(center - eye)).UnitVector()
-        md1 = cross(md0,(center - eye)).UnitVector() * amt
-        Set(eye+md1,center+md1,up)
+        md0 = np.linalg.norm( np.cross(self.up,(self.center - self.eye)) )
+        md1 = np.linalg.norm( np.cross(md0,(self.center - self.eye)) ) * amt
+        self.Set(self.eye+md1,self.center+md1,self.up)
     
     def MoveDown(self, amt):
-        md0 = cross(up,(center - eye)).UnitVector()
-        md1 = cross(md0,(center - eye)).UnitVector() * amt
-        Set(eye-md1,center-md1,up)
+        md0 = np.linalg.norm( np.cross(self.up,(self.center - self.eye)) )
+        md1 = np.linalg.norm( np.cross(md0,(self.center - self.eye)) ) * amt
+        self.Set(self.eye-md1,self.center-md1,self.up)
     
     def RotateLeftRight(self, amt):
-        Yaw(amt)
+        self.Yaw(amt)
     
     def RotateUpDown(self, amt):
-        Pitch(amt)
+        self.Pitch(amt)
     
     def Yaw(self, amt):
-        forward = (center - eye).UnitVector()
-        right = cross(forward,up).UnitVector()
-            nfrwd = forward * .cosf(DEG2RAD(amt)) + right * .sinf(DEG2RAD(amt))
-        Set(eye,eye+nfrwd,up)
+        forward = np.linalg.norm( (self.center - self.eye) ) #UnitVector()
+        right = np.linalg.norm( np.cross(forward, self.up) ) #UnitVector()
+        nfrwd = forward * np.cos(np.radians(amt)) + right * np.sin(np.radians(amt))
+        self.Set(self.eye,self.eye+nfrwd,self.up)
     
     def Pitch(self, amt):
-        forward = (center - eye).UnitVector()
-        right = cross(forward,up).UnitVector()
-            nfrwd = forward * .cosf(DEG2RAD(amt)) + up * .sinf(DEG2RAD(amt))
-        nup = cross(right,nfrwd).UnitVector()
-        Set(eye,eye+nfrwd,nup)
+        forward = np.linalg.norm(self.center - self.eye) #UnitVector()
+        right = np.cross(forward, self.up) #UnitVector()
+        nfrwd = forward * np.cos(np.radians(amt)) + self.up * np.sin(np.radians(amt))
+        nup = np.linalg.norm( np.cross(right,nfrwd) ) #UnitVector()
+        self.Set(self.eye,self.eye+nfrwd,nup)
     
     def Roll(self, amt):
-        forward = (center - eye).UnitVector()
-        right = cross(forward,up).UnitVector()
-            nup = up * .cosf(DEG2RAD(amt)) + right * .sinf(DEG2RAD(amt))
-        Set(eye,center,nup)
+        forward = np.linalg.norm( self.center - self.eye ) #UnitVector()
+        right = np.cross(forward, self.up) #UnitVector()
+        nup = self.up * np.cos(np.radians(amt)) + right * np.sin(np.radians(amt))
+        self.Set(self.eye,self.center,nup)
             
