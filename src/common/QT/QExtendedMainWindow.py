@@ -106,12 +106,13 @@ class QExtendedMainWindow(QMainWindow):
         options = QFileDialog.DontResolveSymlinks;
         options |= QFileDialog.DontUseNativeDialog;
         
-        #dir = QSettings('workingDirectory')
-        dir = 'workingDirectory'
-        fname = QFileDialog.getOpenFileName( 0, title, dir, ftypes, 0, options )
+        fname = ''
+        
+        #d = QSettings.value('workingDirectory').toString()
+        #fname = QFileDialog.getOpenFileName( 0, title, d, ftypes, 0, options )
     
-        if fname.size() > 0:
-            QSettings.setValue('workingDirectory', QFileInfo( fname ).canonicalPath() )
+        #if fname.size() > 0:
+        #    QSettings.setValue('workingDirectory', QFileInfo( fname ).canonicalPath() )
     
         return fname
 
@@ -120,13 +121,15 @@ class QExtendedMainWindow(QMainWindow):
         options = QFileDialog.DontResolveSymlinks
         options |= QFileDialog.DontUseNativeDialog
     
+        '''
         dir        = QSettings().value('workingDirectory').toString()
         fname_list = QFileDialog.getOpenFileNames( 0, title, dir, ftypes, 0, options )
     
         if fname_list.size() > 0:
             QSettings().setValue('workingDirectory', QFileInfo( fname_list.at(0) ).canonicalPath() )
+        '''
     
-        return fname_list;
+        return ''#fname_list
 
     @staticmethod
     def directoryDialog(title ):

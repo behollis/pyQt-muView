@@ -287,6 +287,7 @@ class HeartDock(QDockWidget):
                     File (*.point.gz);; PTS File (*.pts)' )  
     
         # Loading a point data file
+        '''
         if( fname.endsWith('.point') or fname.endsWith('.point.gz') ):
             return 0
             #return Data.Mesh.PointMesh( fname.toLocal8Bit().data(), self.true, fname.endsWith('.gz') )
@@ -294,8 +295,9 @@ class HeartDock(QDockWidget):
         elif fname.endsWith('.pts'): 
             #return Data.Mesh.PointMesh( fname.toLocal8Bit().data(), False, False )
             return 0
+        '''
         
-        return 0
+        return 1#0
 
     @staticmethod
     def OpenDistanceField():
@@ -313,6 +315,7 @@ class HeartDock(QDockWidget):
         mesh_name = QExtendedMainWindow.QExtendedMainWindow.openDialog( 'Load an Associated Mesh', \
                         'Any (*.tet *.hex *.btet *.btet.gz *.bhex);; Tet File (*.tet);; Binary Tets File (*.btet *.btet.gz);; Hex File (*.hex);; Binary Hex File (*.bhex)')
 
+        '''
         if mesh_name.endsWith('.btet') or mesh_name.endsWith('.btet.gz') or mesh_name.endsWith('.tet'):
             #return Data.Mesh.TetMesh( mesh_name.toLocal8Bit().data() )
             return 0
@@ -320,14 +323,16 @@ class HeartDock(QDockWidget):
         if mesh_name.endsWith('.bhex') or mesh_name.endsWith('.hex'):
             #return Data.Mesh.HexMesh( mesh_name.toLocal8Bit().data() )
             return 0
+        '''
         
-        return 0
+        return 1#0
 
     @staticmethod
-    def OpenPointData(pdata ):
+    def OpenPointData():
         fname_list = QExtendedMainWindow.QExtendedMainWindow.openListDialog( 'Load Data Files', \
                         'All Data Files (*.pdata *.txt *.sol);;Point Data File (*.pdata);;Text Data Files (*.txt);;Solution File (*.sol)') 
 
+        '''
         for i in range( 0, fname_list.size(), 1 ):
             #Data.PointData ptmp0 = pdata
             #Data.PointData ptmp1 = Data.PointData( fname_list.at(i).toLocal8Bit().data(), fname_list.at(i).endsWith('.pdata') )
@@ -336,16 +341,19 @@ class HeartDock(QDockWidget):
             #    pdata = ptmp1
             #else:
             pdata = 0#Data.PointData( *ptmp0, *ptmp1 )
+        '''
         
-        return pdata
+        return 1#pdata
 
     @staticmethod
     def OpenFiberData():
         fibs_name = QExtendedMainWindow.QExtendedMainWindow.openDialog( 'Load Fiber Data',\
                         'Any (*.txt *.fibs);; Fiber File (*.txt);; Binary Fiber File (*.fibs)') 
 
+        '''
         if fibs_name.endsWith('.txt') or fibs_name.endsWith('.fibs'):
             #return Data.FiberDirectionData( fibs_name.toLocal8Bit().data(), fibs_name.endsWith('.fibs') )
             return 0
+        '''
             
-        return 0
+        return 1#0

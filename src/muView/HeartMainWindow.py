@@ -91,16 +91,15 @@ class MainWindow(QExtendedMainWindow):
         Data::FiberDirectionData * fdata = 0
         '''
         
-        #pmesh = HeartDock.OpenPointMesh()
+        pmesh = HeartDock.OpenPointMesh()
         
-        #if pmesh:
-        #    smesh = HeartDock.OpenSolidMesh()
+        if pmesh:
+            smesh = HeartDock.OpenSolidMesh()
         
-        #if smesh:
-        #    fdata = HeartDock.OpenFiberData()
-        #    pdata = HeartDock.OpenPointData()
+        if smesh:
+            fdata = HeartDock.OpenFiberData()
+            pdata = HeartDock.OpenPointData()
         
-        pdata = True # TEST
         if pdata:
             self.cur_dock = HeartDock()
             #self.cur_dock = HeartDock(view, pmesh, smesh, fdata, self )
