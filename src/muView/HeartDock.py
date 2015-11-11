@@ -121,10 +121,10 @@ class HeartDock(QDockWidget):
 
         cluster_type = QControlWidget.QControlWidget()
     
-        #ct0 = cluster_type.addRadioButton( 'L2 Norm' )
-        #ct1 = cluster_type.addRadioButton( 'Pearson Correlation' )
-        #ct2 = cluster_type.addRadioButton( 'Histogram Difference' )
-        #ct0.setChecked( self.true )
+        ct0 = cluster_type.addRadioButton( 'L2 Norm' )
+        ct1 = cluster_type.addRadioButton( 'Pearson Correlation' )
+        ct2 = cluster_type.addRadioButton( 'Histogram Difference' )
+        ct0.setChecked( True )
         
         '''
         ct0.clicked.connect(&(render_engine).setClusterTypeL2Norm)
