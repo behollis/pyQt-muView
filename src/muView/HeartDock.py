@@ -29,16 +29,16 @@ class HeartDock(QDockWidget):
         super(QDockWidget, self).__init__()
         
         self.pdata     = None   #Data::PointData          *
-        self.pmesh     = None  #Data::Mesh::PointMesh    *
-        self.tdata     = None  #Data::Mesh::SolidMesh    *
-        self.fdata     = None  #Data::FiberDirectionData * 
-        self.dfield    = None #Data::DistanceFieldSet   * 
+        self.pmesh     = None   #Data::Mesh::PointMesh    *
+        self.tdata     = None   #Data::Mesh::SolidMesh    *
+        self.fdata     = None   #Data::FiberDirectionData * 
+        self.dfield    = None   #Data::DistanceFieldSet   * 
     
         self.sp_widget  = None  #QSplitter           * 
         self.vp_widget  = None  #QSplitter           * 
         self.tb_widget  = None  #QTabWidget          * 
         
-        #self.pr_widget  = None  #ParallelCoordinates * 
+        #self.pr_widget  = None    #ParallelCoordinates * 
         self.render_engine  = None #RenderEngine 
         
         self.init(pView,_pmesh,_smesh,_fdata,parent)

@@ -6,6 +6,6 @@ from abc import ABCMeta, abstractmethod
 class CameraControls():
     __metaclass__ = ABCMeta
     @abstractmethod
-    def GetView(self, ...):
-        ...
+    def GetView(self, Ellipsis):
+        Ellipsis
     

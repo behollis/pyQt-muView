@@ -2,13 +2,14 @@ from PyQt5.QtWidgets import QAction, QMenu, QApplication
 import numpy as np
 from PyQt5.QtCore import Qt
 from common.QT.QExtendedMainWindow import QExtendedMainWindow
+from common.SCI.Camera.ThirdPersonCameraControls import ThirdPersonCameraControls
 from HeartDock import HeartDock
 
 class MainWindow(QExtendedMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         
-        self.view               = None#SCI::ThirdPersonCameraControls   
+        self.view               = ThirdPersonCameraControls()   
         self.cur_dock           = None#HeartDock()                
         self.file_menu          = QMenu()                 
         self.open_mesh          = None#QAction()               
@@ -27,7 +28,14 @@ class MainWindow(QExtendedMainWindow):
     def init(self): 
         self.cur_dock = 0
         
-        #self.view.Set( 15.0, 75.0, 5.0, (0,0,0), (0,1,0) )
+        self.view.Set( 15.0, 75.0, 5.0, (0,0,0), (0,1,0) )
+        
+        ''' From view.txt
+        DistanceToCenter 5.000000
+        AngleX 15.000000
+        AngleY 75.000000
+        Center 0.000000 0.000000 0.000000
+        '''
         #self.view.Load('view.txt')
     
         # Setup File Menu
@@ -111,6 +119,7 @@ class MainWindow(QExtendedMainWindow):
             #if pmesh: 
             #    pmesh = None
             #if smesh: 
+            
             #    smesh = None
             if pdata: 
                 pdata = None

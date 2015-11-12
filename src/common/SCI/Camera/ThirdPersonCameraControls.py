@@ -5,8 +5,8 @@
 #include <SCI/Camera/LookAt.h>
 #include <SCI/Camera/ThirdPersonCameraControls.h>
 
-from SCI.Camera.CameraControls import CameraControls
-from SCI.Camera.CameraControls import LookAt
+from common.SCI.Camera.CameraControls import CameraControls
+from common.SCI.Camera.LookAt import LookAt
 
 import numpy as np
 
@@ -34,21 +34,21 @@ ThirdPersonCameraControls(startAngleX = 0.0f, startAngleY = 45.0f, startDistance
 class ThirdPersonCameraControls(CameraControls):
     
     def __init__( self, startAngleX = 0.0, startAngleY = 45.0, \
-                 startDistance = 40.0, startCenter = np.ndarray[(0,0,0)], \
+                 startDistance = 40.0, startCenter = np.ndarray([0,0,0]), \
                  up = np.ndarray([0,1,0]) ):
-        super(CameraControls,self).__init__()
+        super(ThirdPersonCameraControls, self).__init__()
 
-        self.DistanceToCenter
-        self.AngleX
-        self.AngleY
+        self.DistanceToCenter = 0.
+        self.AngleX = 0.
+        self.AngleY = 0.
 
-        self.up #Vec3
-        self.DirectionToEye #Vec3
-        self.Center #Vec3
+        self.up = np.ndarray([0.,0.,0.])
+        self.DirectionToEye = np.ndarray([0.,0.,0.])
+        self.Center = np.ndarray([0.,0.,0.])
 
-        self.cs_x #Vec3
-        self.cs_y #Vec3
-        self.cs_z #Vec3
+        self.cs_x  = np.ndarray([0.,0.,0.])
+        self.cs_y  = np.ndarray([0.,0.,0.])
+        self.cs_z  = np.ndarray([0.,0.,0.])
 
         lat = LookAt() #LookAt
 
@@ -84,15 +84,15 @@ class ThirdPersonCameraControls(CameraControls):
     
         Center = startCenter
     
-        _RecalcView()
+        self._RecalcView()
 
     def _RecalcView(self):
         #DirectionToEye = Mat4(Mat4.MAT4_ROTATION,AngleX,0,1,0) * Mat4(Mat4.MAT4_ROTATION,180.0f-AngleY,1,0,0) * (-up)
     
-        cs_z = np.ndarray[(0,0,0)] - np.linalg.norm( self.DirectionToEye) \
-            * np.linalg.norm( self.DistanceToCenter )
+        cs_z = np.ndarray([0,0,0]) - self.DirectionToEye / np.linalg.norm( self.DirectionToEye ) \
+            *  ( self.DirectionToEye / np.linalg.norm( self.DistanceToCenter ) )
         cs_x = np.cross( cs_z, np.ndarray([0,1,0]) )
-        cs_y = np.linalg.norm( np.cross( cs_x, cs_z ) )
+        cs_y = np.cross( cs_x, cs_z ) / np.linalg.norm( np.cross( cs_x, cs_z ) )
     
         self.lat.Set(np.linalg.norm(self.DirectionToEye) * \
                      self.DistanceToCenter + self.Center, self. Center, cs_y )
@@ -140,6 +140,20 @@ class ThirdPersonCameraControls(CameraControls):
             self.DistanceToCenter = 0.1
         
         self._RecalcView()
+      
+    '''  
+    def Load( char* fname){
+        FILE* infile
+        #if(fopen_s(&infile,fname,"r") != 0){ return False; }
+        if( (infile=fopen(fname,"r")) == 0){ return False; }
+        if( fscanf(infile," %*s %f ",      &DistanceToCenter)             != 1 ) printf("WARNING: ThirdPersonCameraControls.Load Error\n")
+        if( fscanf(infile," %*s %f ",      &AngleX)                       != 1 ) printf("WARNING: ThirdPersonCameraControls.Load Error\n")
+        if( fscanf(infile," %*s %f ",      &AngleY)                       != 1 ) printf("WARNING: ThirdPersonCameraControls.Load Error\n")
+        if( fscanf(infile," %*s %f %f %f ",&Center.x,&Center.y,&Center.z) != 3 ) printf("WARNING: ThirdPersonCameraControls.Load Error\n")
+        fclose(infile)
+        _RecalcView()
+        return True
+    '''
 
     '''
     def Save( char* fname){
@@ -153,17 +167,7 @@ class ThirdPersonCameraControls(CameraControls):
         fclose(outfile)
         return True
     
-    def Load( char* fname){
-        FILE* infile
-        #if(fopen_s(&infile,fname,"r") != 0){ return False; }
-        if( (infile=fopen(fname,"r")) == 0){ return False; }
-        if( fscanf(infile," %*s %f ",      &DistanceToCenter)             != 1 ) printf("WARNING: ThirdPersonCameraControls.Load Error\n")
-        if( fscanf(infile," %*s %f ",      &AngleX)                       != 1 ) printf("WARNING: ThirdPersonCameraControls.Load Error\n")
-        if( fscanf(infile," %*s %f ",      &AngleY)                       != 1 ) printf("WARNING: ThirdPersonCameraControls.Load Error\n")
-        if( fscanf(infile," %*s %f %f %f ",&Center.x,&Center.y,&Center.z) != 3 ) printf("WARNING: ThirdPersonCameraControls.Load Error\n")
-        fclose(infile)
-        _RecalcView()
-        return True
+    
     '''
     
     '''

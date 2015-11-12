@@ -8,11 +8,11 @@ import numpy as np
 
 class LookAt():
     def __init__(self):
-        self.mat    #Mat4
-        self.imat   #Mat4
-        self.eye    #Vex3
-        self.center #Vex3
-        self.up     #Vex3
+        self.mat = None   #Mat4
+        self.imat = None  #Mat4
+        self.eye = None   #Vex3
+        self.center = None #Vex3
+        self.up = None    #Vex3
      
     def init(self):   
         None
