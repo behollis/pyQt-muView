@@ -1,0 +1,4 @@
+DistanceToCenter 5.000000
+AngleX 15.000000
+AngleY 75.000000
+Center 0.000000 0.000000 0.000000
