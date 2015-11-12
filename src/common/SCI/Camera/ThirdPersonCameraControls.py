@@ -7,6 +7,7 @@
 
 from common.SCI.Camera.CameraControls import CameraControls
 from common.SCI.Camera.LookAt import LookAt
+from common.SCI.Mat4 import Mat4
 
 import numpy as np
 
@@ -52,7 +53,6 @@ class ThirdPersonCameraControls(CameraControls):
 
         lat = LookAt() #LookAt
 
-        self._RecalcView()
         self.ThirdPersonCameraControls(startAngleX, startAngleY, startDistance, startCenter, up)
 
     def SetCenter(self, cen): 
@@ -67,7 +67,7 @@ class ThirdPersonCameraControls(CameraControls):
         self.AngleX = startAngleX
         self.AngleY = startAngleY
     
-        #self.DirectionToEye = Mat4(Mat4.MAT4_ROTATION,AngleX,0,1,0) * Mat4(Mat4.MAT4_ROTATION,180.0f-AngleY,1,0,0) * (-up)
+        self.DirectionToEye = Mat4(Mat4.MAT4_ROTATION,AngleX,0,1,0) * Mat4(Mat4.MAT4_ROTATION,180.0f-AngleY,1,0,0) * (-up)
     
         self.Center = startCenter
     
