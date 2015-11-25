@@ -187,6 +187,7 @@ class Mat4:
     def LoadZero(self):
         self.data.fill(0.)
     
+    '''
     void Mat4::LoadIdentity(){
             for(int i = 0; i < 4; i++){
                     for(int j = 0; j < 4; j++){
@@ -194,6 +195,7 @@ class Mat4:
             }
         }
     }
+    '''
     
     void Mat4::LoadRotation(float angle, float x, float y, float z){
             float mag = sqrtf(x*x + y*y + z*z);
@@ -215,6 +217,7 @@ class Mat4:
     
     }
     
+    '''
     void Mat4::LoadTranslation(float x, float y, float z){
         LoadIdentity();
         data[12] = x;
@@ -449,4 +452,4 @@ class Mat4:
             data[i] = mat[i];
         }
     }
-    
+    '''
